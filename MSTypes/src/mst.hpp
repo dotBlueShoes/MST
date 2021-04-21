@@ -40,6 +40,7 @@
 // https://docs.microsoft.com/en-us/cpp/cpp/constructors-cpp?view=msvc-160
 
 #pragma once
+
 #include <cstdint>
 #include <string>
 
