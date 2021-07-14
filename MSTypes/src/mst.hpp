@@ -44,35 +44,142 @@
 #include <cstdint>
 #include <string>
 
-using std::string;
-
 /* [ Types & Keywords ] */
 namespace mst {
 
 	#define forever while(true) // Infinite Loop 
+
+	#define getter [[nodiscard]] inline constexpr
 	#define block inline void
+	#define rename inline
 
 	/* Intieger Unsigned */
 	using uint64 = uint64_t;		// Unsigned Intiger 64bit.
 	using uint32 = uint32_t;		// Unsigned Intiger 32bit.
 	using uint16 = uint16_t;		// Unsigned Intiger 16bit.
-	using uint8 = uint8_t;		// Unsigned Intiger 8bit.
+	using uint8 = uint8_t;			// Unsigned Intiger 8bit.
 
 	/* Intieger Signed */
-	using int64 = int64_t;		// Signed Intiger 64bit.
-	using int32 = int32_t;		// Signed Intiger 32bit.
-	using int16 = int16_t;		// Signed Intiger 16bit.
+	using int64 = int64_t;			// Signed Intiger 64bit.
+	using int32 = int32_t;			// Signed Intiger 32bit.
+	using int16 = int16_t;			// Signed Intiger 16bit.
 	using int8 = int8_t;			// Signed Intiger 8bit.
 
-	/* Characters */
+	/* Characters Unsigned */
 	using uchar32 = char32_t;		// Unsigned Character 32bit.
 	using uchar16 = char16_t;		// Unsigned Character 16bit.
-	//using uchar8 = unsigned char;	// Remove this type.
-	using uchar = unsigned char;	// Unsigned Character 8bit.
+	using uchar8 = unsigned char;	// Unsigned Character 8bit.
+
+	/* Characters Signed */
+	using char8 = char;				// Signed Character 8bit.
 
 	/* Reals */
 	using real64 = double;			// Floating Point 64bit.
 	using real32 = float;			// Floating Point 32bit.
+
+	namespace string {
+
+		using std::string;			// String Type.
+
+		template <typename T>
+		rename string toString(const T arg) {
+			return std::to_string(arg);
+		}
+	}
+
+	namespace nativeArray {
+
+		// ConstNativeArray
+		//  This is a i hope 0 cost container for
+		//  array types that requires having both
+		//  array and it's length known.
+		// It is a const variant because we're not
+		//  doing any dynamic allocation with it.
+		template<typename T>
+		class NativeArrayConst {
+			const T* data = nullptr;
+			size_t length = 0;
+		public:
+			constexpr NativeArrayConst(const std::initializer_list<T> list) {
+				length = list.size();
+				data = list.begin();
+			}
+
+			/* Iteration */
+			getter const T* begin() const noexcept { return &data[0]; }
+			getter const T* end() const noexcept { return &data[length]; }
+
+			/* Getters */
+			getter const size_t Length() { return length; }
+			getter const T* Data() { return data; }
+
+		};
+
+		template <typename T>
+		struct NativeArray {
+		private:
+			T* data = nullptr;
+			size_t length;
+
+		public:
+			//NativeArray(const size_t newLength, T* newData) {
+			//	data = newData;
+			//	length = newLength;
+			//}
+
+			//NativeArray(const size_t newLength, const T* newData) {
+			//	data = newData;
+			//	length = newLength;
+			//}
+
+			// Do i want a std::initializer_list in a non const object???
+			constexpr NativeArray(std::initializer_list<T> list) {
+				length = list.size();
+				data = new T[length];
+				for (size_t i = 0; i < length; i++)
+					data[i] = *(list.begin() + i);
+			}
+
+			~NativeArray() {
+				delete[] data;
+			}
+
+			_NODISCARD  constexpr T* begin() noexcept {
+				return &data[0];
+			}
+
+			_NODISCARD constexpr T* end() noexcept {
+				return &data[length];
+			}
+
+			//T& operator()();
+
+			//NativeArray(const T* newData, const size_t newLength) {
+			//	data = newData;
+			//	length = newLength;
+			//}
+
+			//NativeArray() : data{1, 2} {}
+			//NativeArray(int a, int b) {}
+			//NativeArray(const char* a) {}
+			//NativeArray(size_t newLength,) : data{ 3, 4, 5 } {
+			//	length = newLength;
+			//}
+
+			//T& operator=(const T& other) {
+			//	//std::cout << "lol!";
+			//}
+
+			//template<typename U> 
+			//T& operator=(const NativeArray<U>) {};
+
+			inline size_t Length() { return length; }
+			inline T* Data() { return data; }
+
+		};
+	}
+	
+	
 
 	/* NativeArray */
 	//template <typename T>
@@ -151,10 +258,10 @@ namespace mst {
 	//template <typename AT, typename BT, typename CT, typename DT> struct Map4 { AT x; BT y; CT z; DT w; };
 
 	// ?? weird thing that i am gonna delete.
-	namespace Uint64 {
-		inline string ToString(const uint64 uintiger) { return std::to_string(uintiger); }
-		//inline real64 ToReal64(uint64 uintiger) { return (real64)uintiger; }
-	}
+	//namespace Uint64 {
+	//	inline string::string ToString(const uint64 uintiger) { return std::to_string(uintiger); }
+	//	//inline real64 ToReal64(uint64 uintiger) { return (real64)uintiger; }
+	//}
 
 	// something
 	namespace utility {

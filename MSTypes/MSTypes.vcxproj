@@ -147,9 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\mst.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\mst.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
