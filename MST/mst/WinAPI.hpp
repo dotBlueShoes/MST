@@ -1,5 +1,6 @@
 #pragma once
 #include "winapi/types.hpp"
+#include "charactertypes.hpp"
 #include "array.hpp"
 
 using namespace mst::array_n;
@@ -75,6 +76,21 @@ namespace mst {
 
 			memcpy(buffor.Data(), tempBuffor.Data(), sizeof buffor);
 		}
+
+		namespace message {
+			inline auto Get(retrivedMessage& retrived) { return GetMessage(&retrived, nullptr, 0, 0); }
+			inline auto Translate(retrivedMessage& retrived) { return TranslateMessage(&retrived); }
+			inline auto Dispatch(retrivedMessage& retrived) { return DispatchMessage(&retrived); }
+		}
+
+		namespace accelerator {
+			inline auto Load(handleInstnace& instance, wchar* identifier) { return LoadAccelerators(instance, identifier); }
+			inline auto Translate(windowHandle& window, keysMap& keys, retrivedMessage& retrived) { return TranslateAccelerator(window, keys, &retrived); }
+		}
+
+		inline constexpr auto GetMenuInput(messageW& w) { return LOWORD(w); }
+		inline auto DefaultWindowProcedure(windowHandle& window, uint32& message, messageW& w, messageL& l) { 
+			return DefWindowProc(window, message, w, l); }
 
 	}
 }

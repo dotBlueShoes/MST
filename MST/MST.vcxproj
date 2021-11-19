@@ -152,7 +152,8 @@
     <ClInclude Include="MST.hpp" />
     <ClInclude Include="mst\Array.hpp" />
     <ClInclude Include="mst\BasicTypes.hpp" />
-    <ClInclude Include="mst\nArray.hpp" />
+    <ClInclude Include="mst\CharacterTypes.hpp" />
+    <ClInclude Include="mst\NArray.hpp" />
     <ClInclude Include="mst\OpenAL-Soft.hpp" />
     <ClInclude Include="mst\openal-soft\Types.hpp" />
     <ClInclude Include="mst\WinAPI.hpp" />

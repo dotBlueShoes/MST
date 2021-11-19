@@ -5,17 +5,41 @@ namespace mst::winapi {
 
 	// Windows types https://docs.microsoft.com/en-us/windows/win32/winprog/windows-data-types
 
-#undef HANDLE
+//#undef HANDLE
 
-	using handle = HANDLE;
-	using dword = DWORD;
+	using handleInstnace	= HINSTANCE;
+	using windowProcedure	= WNDPROC;
+	using windowClass		= WNDCLASSEXW;
+
+	using objectHandle = HANDLE;
+
+	using displayContextHandle = HDC;
+	using cursorHandle = HCURSOR;
+	using brushHandle = HBRUSH;
+	using windowHandle = HWND;
+	using iconHandle = HICON;
+
+	// If one day i would do something with x32..
+	using messageW = WPARAM; // uint64
+	using messageL = LPARAM; // int64
+	using retrivedMessage = MSG;
+
+	using windowDrawContext = PAINTSTRUCT;
+	using keysMap = HACCEL;
+
+	enum class proceeded : int64 {
+		pFalse = 0,
+		pTrue = 1
+	};
+
+	//using dword = DWORD;
 
 	// This is commonly outdated.
 	//  It's recomended to use LPCWSTR instead.
-	using pcwstr = PCWSTR;
+	// using pcwstr = PCWSTR;
 
-	using lpcwstr = LPCWSTR;
-	using lpwstr = LPWSTR;
+	//using lpcwstr = LPCWSTR;
+	//using lpwstr = LPWSTR;
 
 	// containers
 
