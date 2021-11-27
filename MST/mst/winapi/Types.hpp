@@ -7,6 +7,10 @@ namespace mst::winapi {
 
 //#undef HANDLE
 
+	#define stdcall __stdcall
+	#define sal_in _In_
+	#define sal_io _In_opt_
+
 	using handleInstnace	= HINSTANCE;
 	using windowProcedure	= WNDPROC;
 	using windowClass		= WNDCLASSEXW;

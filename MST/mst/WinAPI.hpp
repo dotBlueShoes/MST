@@ -88,6 +88,11 @@ namespace mst {
 			inline auto Translate(windowHandle& window, keysMap& keys, retrivedMessage& retrived) { return TranslateAccelerator(window, keys, &retrived); }
 		}
 
+		namespace wideString {
+			inline auto Load(const handleInstnace& instance, const uint32& resourceId, wchar* buffor, const int32 bufforLength) { 
+				return LoadStringW(instance, resourceId, buffor, bufforLength); }
+		}
+
 		inline constexpr auto GetMenuInput(messageW& w) { return LOWORD(w); }
 		inline auto DefaultWindowProcedure(windowHandle& window, uint32& message, messageW& w, messageL& l) { 
 			return DefWindowProc(window, message, w, l); }
