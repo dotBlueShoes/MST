@@ -1,4 +1,5 @@
 #pragma once
+#include "winapi/window.hpp"
 #include "winapi/types.hpp"
 #include "charactertypes.hpp"
 #include "array.hpp"
@@ -89,7 +90,7 @@ namespace mst {
 		}
 
 		namespace wideString {
-			inline auto Load(const handleInstnace& instance, const uint32& resourceId, wchar* buffor, const int32 bufforLength) { 
+			inline auto Load(const handleInstnace& instance, const resourceType& resourceId, wchar* buffor, const int32& bufforLength) {
 				return LoadStringW(instance, resourceId, buffor, bufforLength); }
 		}
 

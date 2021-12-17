@@ -1,17 +1,29 @@
 #pragma once
+#include "../basictypes.hpp"
 #include <windows.h>
 
 namespace mst::winapi {
 
 	// Windows types https://docs.microsoft.com/en-us/windows/win32/winprog/windows-data-types
 
-//#undef HANDLE
+	#if WINDOWS_VERSION == _WIN32_WINNT_WIN10
+		#define WINDOWS_VERSION_10 _WIN32_WINNT_WIN10
+	#elif WINDOWS_VERSION == _WIN32_WINNT_WIN8
+		#define WINDOWS_VERSION_8		_WIN32_WINNT_WIN8
+	#elif WINDOWS_VERSION == _WIN32_WINNT_WIN7
+		#define WINDOWS_VERSION_7		_WIN32_WINNT_WIN7
+	#elif WINDOWS_VERSION == _WIN32_WINNT_VISTA
+		#define WINDOWS_VERSION_VISTA	_WIN32_WINNT_VISTA
+	#elif WINDOWS_VERSION == _WIN32_WINNT_WINXP
+		#define WINODWS_VERSION_XP		_WIN32_WINNT_WINXP
+	#endif
 
-	#define stdcall __stdcall
-	#define sal_in _In_
-	#define sal_io _In_opt_
+	#define stdcall		__stdcall
+	#define sal_in		_In_
+	#define sal_io		_In_opt_
 
 	using handleInstnace	= HINSTANCE;
+	using moduleInstance	= HMODULE;
 	using windowProcedure	= WNDPROC;
 	using windowClass		= WNDCLASSEXW;
 
@@ -30,11 +42,6 @@ namespace mst::winapi {
 
 	using windowDrawContext = PAINTSTRUCT;
 	using keysMap = HACCEL;
-
-	enum class proceeded : int64 {
-		pFalse = 0,
-		pTrue = 1
-	};
 
 	//using dword = DWORD;
 
@@ -69,5 +76,20 @@ namespace mst::winapi {
 
 	using consoleScreenBufferInfo = CONSOLE_SCREEN_BUFFER_INFOEX;
 	using consoleFontInfo = CONSOLE_FONT_INFOEX;
+
+	using resourceType = uint32;
+
+	enum class proceeded : int64 {
+		False = 0,
+		True = 1
+	};
+
+	enum windowInput : int32 {
+		InitializeDialogWindow = WM_INITDIALOG,
+		Command = WM_COMMAND,
+		Destroy = WM_DESTROY,
+		Create = WM_CREATE,
+		Paint = WM_PAINT
+	};
 
 }
