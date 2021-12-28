@@ -1,5 +1,6 @@
 #pragma once
 #include "../basictypes.hpp"
+#include "../array.hpp"
 #include <windows.h>
 
 namespace mst::winapi {
@@ -30,18 +31,20 @@ namespace mst::winapi {
 	using objectHandle = HANDLE;
 
 	using displayContextHandle = HDC;
+	using keysMapHandle = HACCEL;
 	using cursorHandle = HCURSOR;
 	using brushHandle = HBRUSH;
 	using windowHandle = HWND;
 	using iconHandle = HICON;
+	using fontHandle = HFONT;
 
+	using retrivedMessage = MSG;
 	// If one day i would do something with x32..
 	using messageW = WPARAM; // uint64
 	using messageL = LPARAM; // int64
-	using retrivedMessage = MSG;
-
+	
 	using windowDrawContext = PAINTSTRUCT;
-	using keysMap = HACCEL;
+	using color = COLORREF;
 
 	//using dword = DWORD;
 
@@ -55,8 +58,9 @@ namespace mst::winapi {
 	// containers
 
 	using smallRect = SMALL_RECT;
-	using rect = RECT;
 	using coord = COORD;
+	using point = POINT;
+	using rect = RECT;
 
 	// events-records
 
@@ -78,18 +82,4 @@ namespace mst::winapi {
 	using consoleFontInfo = CONSOLE_FONT_INFOEX;
 
 	using resourceType = uint32;
-
-	enum class proceeded : int64 {
-		False = 0,
-		True = 1
-	};
-
-	enum windowInput : int32 {
-		InitializeDialogWindow = WM_INITDIALOG,
-		Command = WM_COMMAND,
-		Destroy = WM_DESTROY,
-		Create = WM_CREATE,
-		Paint = WM_PAINT
-	};
-
 }

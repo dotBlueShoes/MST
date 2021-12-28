@@ -1,6 +1,8 @@
 #pragma once
-#include "winapi/window.hpp"
 #include "winapi/types.hpp"
+#include "winapi/window.hpp"
+#include "winapi/theme.hpp"
+#include "winapi/uahmenubar.hpp"
 #include "charactertypes.hpp"
 #include "array.hpp"
 
@@ -86,7 +88,7 @@ namespace mst {
 
 		namespace accelerator {
 			inline auto Load(handleInstnace& instance, wchar* identifier) { return LoadAccelerators(instance, identifier); }
-			inline auto Translate(windowHandle& window, keysMap& keys, retrivedMessage& retrived) { return TranslateAccelerator(window, keys, &retrived); }
+			inline auto Translate(windowHandle& window, keysMapHandle& keys, retrivedMessage& retrived) { return TranslateAccelerator(window, keys, &retrived); }
 		}
 
 		namespace wideString {

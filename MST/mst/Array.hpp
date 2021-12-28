@@ -21,11 +21,13 @@ namespace mst::array_n {
 	public:
 
 		// Constructors
-
+		//template <typename Type>
+		//constexpr array(Type newValue) : value { newValue } {}
 		template <typename... Types>
 		constexpr array(Types... newValue) : value { newValue... } {}
 
 		// [] operator
+
 		getter const T& operator[](size index) const noexcept { return value[index]; }
 		getter T& operator[](size index) noexcept { return value[index]; }
 
