@@ -1,11 +1,11 @@
+// Windows types https://docs.microsoft.com/en-us/windows/win32/winprog/windows-data-types
+
 #pragma once
 #include "../basictypes.hpp"
 #include "../array.hpp"
 #include <windows.h>
 
 namespace mst::winapi {
-
-	// Windows types https://docs.microsoft.com/en-us/windows/win32/winprog/windows-data-types
 
 	#if WINDOWS_VERSION == _WIN32_WINNT_WIN10
 		#define WINDOWS_VERSION_10 _WIN32_WINNT_WIN10
@@ -39,21 +39,11 @@ namespace mst::winapi {
 	using fontHandle = HFONT;
 
 	using retrivedMessage = MSG;
-	// If one day i would do something with x32..
 	using messageW = WPARAM; // uint64
 	using messageL = LPARAM; // int64
 	
 	using windowDrawContext = PAINTSTRUCT;
 	using color = COLORREF;
-
-	//using dword = DWORD;
-
-	// This is commonly outdated.
-	//  It's recomended to use LPCWSTR instead.
-	// using pcwstr = PCWSTR;
-
-	//using lpcwstr = LPCWSTR;
-	//using lpwstr = LPWSTR;
 
 	// containers
 
@@ -67,7 +57,8 @@ namespace mst::winapi {
 	using resizeEvent = WINDOW_BUFFER_SIZE_RECORD;
 	using mouseEvent = MOUSE_EVENT_RECORD;
 	using keyEvent = KEY_EVENT_RECORD;
-
+	
+	using dword [[deprecated("Use 'uint32' instead")]] = DWORD;
 	// 86x because it can be 32bit and 64bit same as an 'int'.
 	using bool86x = BOOL;
 

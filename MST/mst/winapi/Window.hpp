@@ -1,7 +1,5 @@
 #pragma once
 #include "types.hpp"
-//#include "../framework.hpp"
-//using namespace winapi;
 
 namespace mst::winapi::window {
 
@@ -11,8 +9,16 @@ namespace mst::winapi::window {
 	};
 
 	enum class input : uint32 {
+
+		// "return 0" means that WM_PAINT instead handles the background color setting up.
+		// It makes passing the background color at window class initialization useless.
+		EraseBackgroundOnCalledInvalidPortion = WM_ERASEBKGND,
+		ControlStaticBeforeDraw = WM_CTLCOLORSTATIC,
+		DialogWindowBeforeDraw = WM_CTLCOLORDLG,
 		InitializeDialogWindow = WM_INITDIALOG,
 		NonClientAreaFocus = WM_NCACTIVATE,
+
+		// This calls whenever we switch from dark mode to light mode and reverse.
 		SettingChange = WM_SETTINGCHANGE,
 		NonClientAreaPaint = WM_NCPAINT,
 		ThemeChange = WM_THEMECHANGED,

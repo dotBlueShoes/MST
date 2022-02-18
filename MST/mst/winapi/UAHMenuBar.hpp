@@ -22,7 +22,7 @@
 // ODS_NOFOCUSRECT	0b0000.0000.0000.0000.0000.0010.0000.0000	0x0200	The control is drawn without focus indicator cues.
 // ODS_COMBOBOXEDIT	0b0000.0000.0000.0000.0001.0000.0000.0000	0x1000	The drawing takes place in the selection field(edit control) of an owner - drawn combo box.
 
-namespace mst::winapi::window::uahmenubar {
+namespace mst::winapi::window::event::uahmenubar {
 
 	#define WM_UAHDESTROYWINDOW    0x0090	// Handled by DefWindowProc
 	#define WM_UAHDRAWMENU         0x0091	// messageL is UAHMENU
@@ -99,7 +99,7 @@ namespace mst::winapi::window::uahmenubar {
 	// No memory leaks here.
 	HTHEME menuTheme = nullptr; 
 
-	int64 DrawMenu(const windowHandle& window, const UAHMENU& menu, const theme::solidBrush& brush) {
+	proceeded DrawMenu(const windowHandle& window, const UAHMENU& menu, const theme::solidBrush& brush) {
 		MENUBARINFO menuBarInfo = { sizeof menuBarInfo };
 		rect windowArea;
 
@@ -112,19 +112,19 @@ namespace mst::winapi::window::uahmenubar {
 			FillRect(menu.hdc, &menuArea, brush.Get());
 		}
 
-		return 0;
+		return proceeded::True;
 	}
 
-	int64 MeasureMenuItem(UAHMEASUREMENUITEM& menuItemMeasure, const uint32& height, const uint32& width, const fontHandle& font = nullptr) {
+	proceeded MeasureMenuItem(UAHMEASUREMENUITEM& menuItemMeasure, const uint32& height, const uint32& width, const fontHandle& font = nullptr) {
 		// We can modify it here to make it 1/3rd wider and higher for example.
 		menuItemMeasure.mis.itemHeight = height;
 		menuItemMeasure.mis.itemWidth = width;
 		// Changing font via hdc
 		// https://stackoverflow.com/questions/46185358/changing-font-of-a-text-in-win32
-		return 0;
+		return proceeded::True;
 	}
 
-	int64 DrawMenuItem(
+	proceeded DrawMenuItem(
 		const windowHandle& window, 
 		UAHDRAWMENUITEM& menuItem,
 		const theme::solidBrush& brush,
@@ -150,6 +150,7 @@ namespace mst::winapi::window::uahmenubar {
 			case 0x0080:
 			case 0x0180:
 				FillRect(menuItem.um.hdc, &menuItem.dis.rcItem, brush.Get());
+				// Here would be the call to make the border underneeth reappear. as if wndproc can be dyn changed i would even propose a different function for such.
 				iBackgroundStateID = MPI_NORMAL;
 				iTextStateID = MPI_NORMAL;
 				break;
@@ -183,15 +184,14 @@ namespace mst::winapi::window::uahmenubar {
 			case 0x0002:
 			case 0x0102:
 			case 0x0004:
-			case 0x0104:
+			case 0x0104: {
 				iBackgroundStateID = MPI_DISABLED;
 				iTextStateID = MPI_DISABLED;
-				{
-					if (!menuTheme) menuTheme = OpenThemeData(window, L"Menu");
-					DTTOPTS opts { sizeof opts, DTT_TEXTCOLOR, RGB(0x40, 0x40, 0x40) };
-					DrawThemeTextEx(menuTheme, menuItem.um.hdc, MENU_BARITEM, MBI_NORMAL, menuText.Pointer(), menuItemInfo.cch, dwFlags, &menuItem.dis.rcItem, &opts);
-				} 
-				return 0;
+				if (!menuTheme) menuTheme = OpenThemeData(window, L"Menu");
+				DTTOPTS opts { sizeof opts, DTT_TEXTCOLOR, RGB(0x40, 0x40, 0x40) };
+				DrawThemeTextEx(menuTheme, menuItem.um.hdc, MENU_BARITEM, MBI_NORMAL, menuText.Pointer(), menuItemInfo.cch, dwFlags, &menuItem.dis.rcItem, &opts);
+				return proceeded::True;
+			} 
 
 			// Other
 			case 0x0100:
@@ -209,7 +209,7 @@ namespace mst::winapi::window::uahmenubar {
 		if (!menuTheme) menuTheme = OpenThemeData(window, L"Menu");
 		DTTOPTS opts { sizeof opts, DTT_TEXTCOLOR, textColor };
 		DrawThemeTextEx(menuTheme, menuItem.um.hdc, MENU_BARITEM, MBI_NORMAL, menuText.Pointer(), menuItemInfo.cch, dwFlags, &menuItem.dis.rcItem, &opts);
-		return 0;
+		return proceeded::True;
 	}
 
 	int64 DrawBottomLine(
@@ -231,7 +231,7 @@ namespace mst::winapi::window::uahmenubar {
 			{
 				rect& menuBarArea = clientArea;
 				menuBarArea.bottom = menuBarArea.top;
-				menuBarArea.top--;
+				menuBarArea.top -= 1; // The height up.
 
 				FillRect(displayContext, &menuBarArea, brush);
 				ReleaseDC(window, displayContext);

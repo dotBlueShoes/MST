@@ -70,14 +70,14 @@ namespace mst {
 		) {
 			const size wcharTypeLength = 16;
 			array<wchar, arrSize> tempBuffor;									// Reverse next logic use.
-			wchar* rNext = tempBuffor.Data() + tempBuffor.size() - wcharTypeLength;
+			wchar* rNext = tempBuffor.Pointer() + tempBuffor.Length() - wcharTypeLength;
 
 			do {
 				*(--rNext) = (wchar)(L'0' + rawValue % 10);
 				rawValue /= 10;
 			} while (rawValue != 0);
 
-			memcpy(buffor.Data(), tempBuffor.Data(), sizeof buffor);
+			memcpy(buffor.Pointer(), tempBuffor.Pointer(), sizeof buffor);
 		}
 
 		namespace message {

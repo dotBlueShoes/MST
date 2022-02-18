@@ -18,7 +18,22 @@
 
 #include <uxtheme.h>
 
-#ifdef WINDOWS_VERSION_10
+// What i really need now is a namespace that can be public/private as class
+//  but ain't an class so i can use namespace aa = asample::asample;
+//class {
+//
+//} darkmode;
+// 
+// This below is stupid as i want to access the value in this whole file. The above would be the solution.
+//class {
+//	bool86x value { false };
+// public:
+//	block Set() { value = proxy::ShouldAppsUseDarkMode() && !IsHighContrast(); }
+//
+//	getter const bool86x* const Reference() { return &value; }
+//	getter const size Size() { return sizeof value; }
+//
+//} newIsEnabled;
 
 namespace mst::winapi::window::darkmode {
 
@@ -61,7 +76,7 @@ namespace mst::winapi::window::darkmode {
 			SIZE_T cbData;
 		};
 
-		enum class IMMERSIVE_HC_CACHE_MODEE {
+		enum class IMMERSIVE_HC_CACHE_MODE {
 			IHCM_USE_CACHED_VALUE,
 			IHCM_REFRESH
 		};
@@ -88,7 +103,7 @@ namespace mst::winapi::window::darkmode {
 		using flushMenuThemes =							void(__stdcall*)	();												// ordinal 136
 		using refreshImmersiveColorPolicyState =		void(__stdcall*)	();												// ordinal 104
 		using isDarkModeAllowedForWindow =				bool(__stdcall*)	(HWND hWnd);									// ordinal 137
-		using getIsImmersiveColorUsingHighContrast =	bool(__stdcall*)	(IMMERSIVE_HC_CACHE_MODEE mode);				// ordinal 106
+		using getIsImmersiveColorUsingHighContrast =	bool(__stdcall*)	(IMMERSIVE_HC_CACHE_MODE mode);					// ordinal 106
 		using openNcThemeData =							HTHEME(__stdcall*)	(HWND hWnd, LPCWSTR pszClassList);				// ordinal 49
 		// ----------
 		// 1903 18362
@@ -115,12 +130,17 @@ namespace mst::winapi::window::darkmode {
 
 	}
 
-	namespace color {
-		const brushHandle backgroundPrimary { CreateSolidBrush(RGB(29, 29, 29)) };
-	}
-	
-	bool isSupported { false };
-	bool isEnabled { false };
+	const wchar* nameImmersiveColorSet { L"ImmersiveColorSet" };
+
+	// Whether the windows version we're running supports it or not.
+	bool isSupported { false };	
+
+	// Whether it is turned on or off. It can be only set as true if it is isSupported.
+	//  ! To make it load new current value call 'CheckEnableState()'.
+	bool86x isEnabled { false }; 
+
+	proxyf bool AllowDarkModeForWindow(HWND window) { return proxy::AllowDarkModeForWindow(window, isEnabled); }
+	proxyf bool AllowDarkModeForApp() { return proxy::AllowDarkModeForApp(isEnabled); }
 
 	bool IsHighContrast() {
 		HIGHCONTRASTW highContrast { sizeof highContrast };
@@ -128,6 +148,60 @@ namespace mst::winapi::window::darkmode {
 			return highContrast.dwFlags & HCF_HIGHCONTRASTON;
 
 		return false;
+	}
+
+	block CheckEnableState() { isEnabled = proxy::ShouldAppsUseDarkMode() && !IsHighContrast(); }
+
+	block RefreshTitleBarTheme(windowHandle window) {
+
+		//if (proxy::SetWindowCompositionAttribute) { - dunno removed
+			//if proxy::IsDarkModeAllowedForWindow(window)&& - dunno removed so messagebox works correctly.
+		//if (proxy::ShouldAppsUseDarkMode() && !IsHighContrast()) dark = TRUE; // literary isEnabled var.
+		
+		proxy::WINDOWCOMPOSITIONATTRIBDATA data { proxy::WINDOWCOMPOSITIONATTRIB::WCA_USEDARKMODECOLORS, &isEnabled, sizeof isEnabled };
+		proxy::SetWindowCompositionAttribute(window, &data);
+	}
+
+	inline constexpr bool IsEqual(const wchar* first, const wchar* second) {
+		byte equals = 0;
+		for (int i = 0; first[i] != L'\0'; ++i)
+			equals += first[i] == second[i];
+		return equals;
+	}
+
+	proceeded CheckWhetherImmersiveColorSet(const windowHandle& window, const wchar* pointer, uint64& counter) {
+		// Ckeck : For some reason we get 10 of those messages but we want only 1.
+		if (IsEqual(pointer, nameImmersiveColorSet) && ++counter == 10) {
+			counter = 0;
+			darkmode::CheckEnableState();
+			SendMessageW(window, (uint32)input::ThemeChange, 0, 0);
+			return proceeded::True;
+		}
+
+		return proceeded::False;
+	}
+
+		// For some reason the changing from lightmode to darkmode and vice versa
+		// always take 10 calls in here with only wParam chaning.
+		// This wParam holds information obaut "SystemParametersInfo"
+		// I tried to decode it however those are not bit flags.
+		// Instead they have a hex meaning and they are added to each other.
+
+		// I found the a solution to discard unnecesery for me messages.
+		// Which would be done with "PeekMessage" and flags PM_NOREMOVE, PM_REMOVE
+		// however the actual working solution is to applay a counter and hope it will lock at 10 msgs.
+	proceeded CheckMainWindowWhetherImmersiveColorSet(const windowHandle& window, const wchar* pointer, uint64& counter) {
+		// Ckeck : For some reason we get 10 of those messages but we want only 1.
+		if (IsEqual(pointer, nameImmersiveColorSet) && ++counter == 10) {
+			counter = 0;
+			darkmode::proxy::RefreshImmersiveColorPolicyState();
+			darkmode::proxy::GetIsImmersiveColorUsingHighContrast(darkmode::proxy::IMMERSIVE_HC_CACHE_MODE::IHCM_REFRESH);
+			darkmode::CheckEnableState();
+			SendMessageW(window, (uint32)input::ThemeChange, 0, 0);
+			return proceeded::True;
+		}
+
+		return proceeded::False;
 	}
 
 	void Initialize() {
@@ -181,7 +255,7 @@ namespace mst::winapi::window::darkmode {
 				proxy::SetPreferredAppMode(proxy::PreferredAppMode::AllowDark);
 				proxy::RefreshImmersiveColorPolicyState();
 
-				isEnabled = proxy::ShouldAppsUseDarkMode() && !IsHighContrast();
+				CheckEnableState();
 
 			}
 
@@ -191,9 +265,6 @@ namespace mst::winapi::window::darkmode {
 	}
 
 }
-
-
-#endif
 
 //extern "C" {
 //	NTSYSAPI	void stdcall RtlGetNtVersionNumbers			(sal_io LPDWORD major, sal_io LPDWORD minor, sal_io LPDWORD build);
