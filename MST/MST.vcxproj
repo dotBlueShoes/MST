@@ -157,7 +157,10 @@
     <ClInclude Include="mst\OpenAL-Soft.hpp" />
     <ClInclude Include="mst\openal-soft\Types.hpp" />
     <ClInclude Include="mst\WinAPI.hpp" />
+    <ClInclude Include="mst\winapi\Application.hpp" />
     <ClInclude Include="mst\winapi\DarkMode.hpp" />
+    <ClInclude Include="mst\winapi\Modules.hpp" />
+    <ClInclude Include="mst\winapi\Registry.hpp" />
     <ClInclude Include="mst\winapi\Theme.hpp" />
     <ClInclude Include="mst\winapi\Types.hpp" />
     <ClInclude Include="mst\winapi\UAHMenuBar.hpp" />

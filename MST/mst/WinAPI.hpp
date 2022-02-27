@@ -1,8 +1,11 @@
 #pragma once
 #include "winapi/types.hpp"
+#include "winapi/modules.hpp"
 #include "winapi/window.hpp"
 #include "winapi/theme.hpp"
 #include "winapi/uahmenubar.hpp"
+#include "winapi/application.hpp"
+#include "winapi/registry.hpp"
 #include "charactertypes.hpp"
 #include "array.hpp"
 
@@ -15,10 +18,8 @@ namespace mst {
 	namespace characters_n {
 
 		inline bool operator==(const decimal<winapi::wchar>& lhs, const char& rhs) {
-			if (lhs.characters[0] == rhs)
-				return true;
-			else
-				return false;
+			if (lhs.characters[0] == rhs) return true;
+			else return false;
 		}
 
 		// Use of this requires us to know that the rhs is the same size or longer.
@@ -26,7 +27,6 @@ namespace mst {
 			for (size i = 0; i < lhs.length; i++)
 				if (lhs.characters[i] != rhs[i])
 					return false;
-
 			return true;
 		}
 

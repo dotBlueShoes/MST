@@ -13,7 +13,6 @@
 // 1903, 1809 are specfied here
 // https://docs.microsoft.com/en-us/windows/win32/accessibility/accessibility-whatsnew
 
-#include "../basictypes.hpp"
 #include "types.hpp"
 
 #include <uxtheme.h>

@@ -2,6 +2,11 @@
 
 #include "basictypes.hpp"
 
+#undef rename
+#include <utility>
+#undef rename
+#define rename __forceinline
+
 //#undef rename
 //#include <utility>
 //#undef rename

@@ -7,6 +7,8 @@
 
 namespace mst::winapi {
 
+	using namespace array_n;
+
 	#if WINDOWS_VERSION == _WIN32_WINNT_WIN10
 		#define WINDOWS_VERSION_10 _WIN32_WINNT_WIN10
 	#elif WINDOWS_VERSION == _WIN32_WINNT_WIN8
@@ -73,4 +75,8 @@ namespace mst::winapi {
 	using consoleFontInfo = CONSOLE_FONT_INFOEX;
 
 	using resourceType = uint32;
+
+	// error-characters
+	const array<wchar, 6> generalError { L"Error" };
+
 }
