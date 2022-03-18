@@ -41,6 +41,7 @@ namespace mst::array_n {
 		// Initialization via Forwarding constructor. ( e.g.: wchar* sample { "Sample" }; )
 		array(const T(&valuePointer)[length]) : array(valuePointer, std::make_index_sequence<length>()) {}
 		// Initialization as List Constructor. ( e.g. uint64 { 1, 2, 3, 4, 5, 6 }; )
+		//  ! Watch out for length. It might produce a wrong error saying this is all wrong.
 		template <typename... Types> constexpr array(Types... newValue) : value { newValue... } {}
 
 		/* Missing Constructors

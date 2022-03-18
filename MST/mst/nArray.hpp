@@ -92,7 +92,7 @@ namespace mst::nArray_n {
 			// Retriver constructor.
 			constexpr nArray(T* const nPointer, const size& nLength) { value = nPointer; length = nLength; }
 
-			// Single Object Constructor.
+			// Single Value Constructor.
 			// Can i optimize it??? like cheat it???
 			//  I would have to make sure that the type takes less then pointer size.
 			//  also i could use an union.

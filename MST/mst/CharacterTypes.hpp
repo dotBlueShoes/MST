@@ -1,6 +1,7 @@
 #pragma once
 
 #include "basictypes.hpp"
+#include <initializer_list>
 
 namespace mst {
 	namespace characters_n {

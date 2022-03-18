@@ -1,5 +1,6 @@
 #pragma once
 #include "types.hpp"
+#include "..\array.hpp"
 
 namespace mst::winapi::registry {
 
@@ -48,35 +49,38 @@ namespace mst::winapi::registry {
 		//	[out]          PHKEY  phkResult
 		//);
 
-		HKEY result1 {}, result2 {}, result3 {}, result4 {};
 		LSTATUS status;
+		HKEY result;
+
+		//const array<wchar, 35> path { L"Directory\\shell\\mst.menu.openwith\\" };
+		//const array<wchar, 10> newKey { L"sampleKey" };
+		const array<wchar, 57> fullPath { L"Directory\\shell\\mst.menu.openwith\\sampleKey\\subSampleKey" };
+
+		status = RegCreateKeyEx(HKEY_CLASSES_ROOT, fullPath.Pointer(), 0, 0, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 0, &result, 0);
+		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success", MB_OK, 0);
+
+		status = RegCloseKey(result);
+		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close", MB_OK, 0);
 
 		// \\shell\\mst.menu.openwith
 
-		status = RegOpenKeyEx(HKEY_CLASSES_ROOT, L"Directory\\shell\\find", 0, KEY_ALL_ACCESS, &result1);
-		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success1", MB_OK, 0);
+		// status = RegOpenKeyEx(HKEY_CLASSES_ROOT, L"Directory\\shell\\find", 0, KEY_ALL_ACCESS, &result1);
+		// if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success1", MB_OK, 0);
+		// //status = RegOpenKeyEx(result1, L"shell", 0, KEY_ALL_ACCESS, &result2);
+		// //if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success2", MB_OK, 0);
+		// //status = RegOpenKeyEx(result2, L"find", 0, KEY_ALL_ACCESS, &result3);
+		// //if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success3", MB_OK, 0);
+		// status = RegOpenKeyEx(result1, L"command", 0, KEY_ALL_ACCESS, &result4);
+		// if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success4", MB_OK, 0);
 
-		//status = RegOpenKeyEx(result1, L"shell", 0, KEY_ALL_ACCESS, &result2);
-		//if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success2", MB_OK, 0);
-
-		//status = RegOpenKeyEx(result2, L"find", 0, KEY_ALL_ACCESS, &result3);
-		//if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success3", MB_OK, 0);
-
-		status = RegOpenKeyEx(result1, L"command", 0, KEY_ALL_ACCESS, &result4);
-		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success4", MB_OK, 0);
-
-
-		status = RegCloseKey(result4);
-		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close4", MB_OK, 0);
-
-		//status = RegCloseKey(result3);
-		//if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close3", MB_OK, 0);
-
-		//status = RegCloseKey(result2);
-		//if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close2", MB_OK, 0);
-
-		status = RegCloseKey(result1);
-		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close1", MB_OK, 0);
+		// status = RegCloseKey(result4);
+		// if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close4", MB_OK, 0);
+		// //status = RegCloseKey(result3);
+		// //if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close3", MB_OK, 0);
+		// //status = RegCloseKey(result2);
+		// //if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close2", MB_OK, 0);
+		// status = RegCloseKey(result1);
+		// if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close1", MB_OK, 0);
 
 		// dzia³a!!!
 		// ogarnij qemu windows 10/11
@@ -87,8 +91,23 @@ namespace mst::winapi::registry {
 
 	}
 
-	block RemoveRegistryKey() {
+	block RemoveRegistryKey(const windowHandle& window) {
 
+		const array<wchar, 57> subKey { L"Directory\\shell\\mst.menu.openwith\\sampleKey\\subSampleKey" };
+		const array<wchar, 44> fullPath { L"Directory\\shell\\mst.menu.openwith\\sampleKey" };
+
+		LSTATUS status;
+		
+		status = RegDeleteKeyEx(HKEY_CLASSES_ROOT, subKey.Pointer(), KEY_WOW64_64KEY, 0);
+		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Remove1", MB_OK, 0);
+
+		status = RegDeleteKeyEx(HKEY_CLASSES_ROOT, fullPath.Pointer(), KEY_WOW64_64KEY, 0);
+		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Remove2", MB_OK, 0);
+
+	}
+
+	block EditRegistryKey(const windowHandle& window) {
+		// https://docs.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntrenamekey
 	}
 
 }

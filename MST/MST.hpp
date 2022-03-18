@@ -43,13 +43,13 @@
 
 #include <stdint.h>
 
-#include <thread>
-#include <string>
-
 #include "mst/characterTypes.hpp"
 #include "mst/basictypes.hpp"
+#include "mst/vector.hpp"
 #include "mst/narray.hpp"
 #include "mst/array.hpp"
+#include "mst/string.hpp"
+#include "mst/thread.hpp"
 
 //#include <array>
 //#include <type_traits>
@@ -60,19 +60,6 @@
 
 /* [ Types & Keywords ] */
 namespace mst {
-
-	namespace string_n {
-		using string = std::string;
-
-		template <typename T>
-		rename string ToString(const T arg) {
-			return std::to_string(arg);
-		}
-	}
-
-	namespace thread_n {
-		using thread = std::thread;
-	}
 
 	//namespace container_n {
 	//	// An object that instance can have vary length.

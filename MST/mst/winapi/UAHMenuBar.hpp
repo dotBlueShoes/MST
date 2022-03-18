@@ -138,7 +138,7 @@ namespace mst::winapi::window::event::uahmenubar {
 		uint32 dwFlags { DT_CENTER | DT_SINGLELINE | DT_VCENTER }; // Get the item state for drawing
 		uint32 iBackgroundStateID { 0 }, iTextStateID { 0 };
 
-		menuItemInfo.dwTypeData = menuText.Pointer();
+		menuItemInfo.dwTypeData = (LPWSTR)menuText.Pointer();
 		menuItemInfo.cch = ((uint32)menuText.Length() / 2) - 1;
 
 		GetMenuItemInfo(menuItem.um.hmenu, menuItem.umi.iPosition, TRUE, &menuItemInfo);
