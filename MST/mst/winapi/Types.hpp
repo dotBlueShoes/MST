@@ -77,6 +77,7 @@ namespace mst::winapi {
 	using resourceType = uint32;
 
 	// error-characters
-	const array<wchar, 6> generalError { L"Error" };
+	// CHANGE IT!
+	//const array<wchar, 6> generalError { L"Error" };
 
 }

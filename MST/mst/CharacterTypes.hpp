@@ -2,6 +2,7 @@
 
 #include "basictypes.hpp"
 #include <initializer_list>
+#include "winapi/types.hpp"
 
 namespace mst {
 	namespace characters_n {
@@ -230,6 +231,30 @@ namespace mst {
 				return *this;
 			}
 		};
+
+		// Known Termination.
+		constexpr const mst::winapi::wchar* operator ""_nt(const mst::winapi::wchar* string, size length) { return string; };
+
+
+		//array& operator ""_nt(const winapi::wchar * string, size length) { return winapi::wchar(&string); };
+		//const T(&valuePointer)[length]
+		//winapi::wchar[7] operator ""_nt(const winapi::wchar * string, size length) { return string; };
+		//void operator ""_test(unsigned long long x) { std::cout << x; } // working
+
+		// ERROR / Prob. - String termination. ( I don't want all string's to be not null terminated. )
+		// Maybe these might help next time.
+		//  generally the thing is:
+		//   I was trying to use literals to solve the issue of terminated strings eg. "Troghol" - being 8 characters long due to termination
+		//  This might be solvable it's just complicated due to CPP not friendly syntax.
+		//  The issue i run at last was the fact that this constructor
+		//  "constexpr const array(const T* reference) : array(reference, std::make_index_sequence<length>()) {}"
+		//  is being called for both "_nt" and "initializer list" parameters.
+		//   Still it came a long path... 
+		//  Maybe it is actually possible to return index_sequance instead
+		//  Maybe i can somehow diffrensiate initializer list from single "_nt"
+		//  AND MAYBE BECAUSE I DON"T KNOW the "_nt" constructor works as it is written right now...
+		// https://www.google.com/search?q=Check+if+parameter+pack+is+the+same+type&sxsrf=APq-WBsm_IlVk2sZs6uYt3LN_29aSOX3BA%3A1648989813206&source=hp&ei=dZZJYrTbCs6RlwSn1bjoCw&iflsig=AHkkrS4AAAAAYkmkheWfRby88MP2Op6ArzfYGyXB6AWw&ved=0ahUKEwj06bXg9ff2AhXOyIUKHacqDr0Q4dUDCAc&uact=5&oq=Check+if+parameter+pack+is+the+same+type&gs_lcp=Cgdnd3Mtd2l6EAMyBQghEKABMgUIIRCgAVCUBFiUBGDZCmgBcAB4AIAByQGIAckBkgEDMi0xmAEAoAECoAEBsAEA&sclient=gws-wiz
+		// https://www.google.com/search?q=return+initializer+list+c%2B%2B&biw=1885&bih=954&sxsrf=APq-WBsMIEno_19_j32NtU_vML_juzC5rw%3A1648990350021&ei=jphJYsl158iuBNShgpgH&oq=return+initializer+list&gs_lcp=Cgdnd3Mtd2l6EAMYATIGCAAQBxAeMgUIABCABDIECAAQHjIECAAQHjIICAAQBxAFEB4yCAgAEAcQBRAeMgYIABAIEB46BwgAEEcQsAM6BwgAELADEEM6BAgAEA06CAgAEAcQChAeOggIABAIEAcQHkoECEEYAEoECEYYAFCxEFjpGmC7N2gBcAF4AIABngGIAcIHkgEDMC43mAEAoAEByAEJwAEB&sclient=gws-wiz
 
 	}
 }

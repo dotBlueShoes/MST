@@ -460,7 +460,7 @@ namespace mst::winapi::console {
 					color textColor { { L'0', L';' }, { L'0', L';' }, { L'0', L'm' } };
 
 					// It goes blue -> green -> red.
-					for (int64 i { 0 }; i < 256 * 256 * 256; ++i) {
+					for (uint64 i(0); i < 256ull * 256ull * 256ull; ++i) {
 
 						const command setTextColor { construct::SetTextColor(textColor) };
 						const command text1 { L'*' };
@@ -529,7 +529,7 @@ namespace mst::winapi::console {
 					std::cerr << "TEXT FORMATING\n";
 
 					// It goes blue -> green -> red.
-					for (int64 i { 0 }; i < 256 * 256 * 256; i++) {
+					for (uint64 i { 0 }; i < 256ull * 256ull * 256ull; i++) {
 
 						const command setTextBackgroundColor { construct::SetTextBackgroundColor(red, green, blue) };
 						const command text1 { L' ' };
@@ -683,7 +683,7 @@ namespace mst::winapi::console {
 			//  winapi::consoleFontInfo is like 98 bytes wheres here we use like 16
 			// Making fontInfo with "{}" would cause an addition assignment to 0 for EVERY var inside.
 
-			winapi::consoleFontInfo fontInfo;
+			winapi::consoleFontInfo fontInfo {}; // It does uses more RAM with an initalization... i guess lets just live with that. It's winapi fault.
 			fontInfo.cbSize = sizeof fontInfo;
 
 			fontInfo.nFont = newFont.sysFontTableIndex;

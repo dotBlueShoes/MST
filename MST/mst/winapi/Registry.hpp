@@ -1,6 +1,7 @@
 #pragma once
 #include "types.hpp"
 #include "..\array.hpp"
+#include "..\CharacterTypes.hpp"
 
 namespace mst::winapi::registry {
 
@@ -54,6 +55,8 @@ namespace mst::winapi::registry {
 
 		//const array<wchar, 35> path { L"Directory\\shell\\mst.menu.openwith\\" };
 		//const array<wchar, 10> newKey { L"sampleKey" };
+		//using namespace characters_n;
+		//using namespace characters_n::operator""_nt;
 		const array<wchar, 57> fullPath { L"Directory\\shell\\mst.menu.openwith\\sampleKey\\subSampleKey" };
 
 		status = RegCreateKeyEx(HKEY_CLASSES_ROOT, fullPath.Pointer(), 0, 0, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 0, &result, 0);

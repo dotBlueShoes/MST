@@ -39,10 +39,22 @@ namespace mst::array_n {
 		// Constructors
 
 		// Initialization via Forwarding constructor. ( e.g.: wchar* sample { "Sample" }; )
-		array(const T(&valuePointer)[length]) : array(valuePointer, std::make_index_sequence<length>()) {}
+		constexpr const array(const T(&notAPointer)[length]) : array(notAPointer, std::make_index_sequence<length>()) {}
+
+		// Copy Constructor.
+		constexpr const array(const array& reference) : array(reference.value, std::make_index_sequence<length>()) {}
+		//constexpr const array(const T* reference) : array(reference, std::make_index_sequence<length>()) {}
+
 		// Initialization as List Constructor. ( e.g. uint64 { 1, 2, 3, 4, 5, 6 }; )
 		//  ! Watch out for length. It might produce a wrong error saying this is all wrong.
-		template <typename... Types> constexpr array(Types... newValue) : value { newValue... } {}
+
+		template <class... Types> 
+		constexpr array(const Types... newValue) : value { newValue... } {}
+
+		//constexpr array(const array<T, length>& copy) : array(copy.Pointer(), std::make_index_sequence<length>()) {}
+		// Does not work because it's an array that has to be known at compile time!
+		// constexpr array(const array& reference) { value = reference.value; }
+		// constexpr array(const array(&reference)) : array(reference.value, std::make_index_sequence<length>()) {} // WTF??
 
 		/* Missing Constructors
 		//template<size L1, size L2>
@@ -90,3 +102,16 @@ namespace mst::array_n {
 	};
 
 }
+
+
+
+//template <class _First, class... _Rest>
+//struct _Enforce_same {
+//	static_assert(conjunction_v<is_same<_First, _Rest>...>,
+//		"N4687 26.3.7.2 [array.cons]/2: "
+//		"Requires: (is_same_v<T, U> && ...) is true. Otherwise the program is ill-formed.");
+//	using type = _First;
+//};
+//
+//template <class _First, class... _Rest>
+//array(_First, _Rest...)->array<typename _Enforce_same<_First, _Rest...>::type, 1 + sizeof...(_Rest)>;
