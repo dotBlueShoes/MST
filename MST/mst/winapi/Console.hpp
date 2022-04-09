@@ -1,3 +1,10 @@
+//
+// ! Important
+//  Initialize() & Destroy() actually don't make the flow of this file clear.
+// If you're inlcuding this file make sure that these are being called otherwise
+// It will you give you errors as there are actions that take part at 
+// initialization of global variables for example "input thread".
+//
 #pragma once
 
 #include "../winapi.hpp"
@@ -159,6 +166,7 @@ namespace mst::winapi::console {
 
 			const compileTime_command<11>
 				clear { L'\x1b', L'[', L'2', L'J', L'\x1b', L'[', L'H', L'\x1b', L'[', L'3', L'J' };
+				//clear(L"\x1b[2J\x1b[H\x1b[3J"_nt);
 
 			const compileTime_command<6>
 				cursorShow { L'\x1b', L'[', L'?', L'2', L'5', L'h' },
@@ -829,6 +837,9 @@ namespace mst::winapi::console {
 
 				if (key.bKeyDown) output = "Key was pressed\n";
 				else output = "Key was released\n";
+
+				//if (key.wVirtualKeyCode == 0x51)
+				//	game::isRunning == false;
 
 				std::cerr << output;
 			}

@@ -78,6 +78,6 @@ namespace mst::winapi {
 
 	// error-characters
 	// CHANGE IT!
-	//const array<wchar, 6> generalError { L"Error" };
+	const array<wchar, 6> generalError(L"Error");
 
 }

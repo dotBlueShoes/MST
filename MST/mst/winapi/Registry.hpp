@@ -1,9 +1,16 @@
 #pragma once
+
 #include "types.hpp"
 #include "..\array.hpp"
 #include "..\CharacterTypes.hpp"
 
+// HERE!
+// WATCHOUT FOR THIS FILE!!!!
+// _nt was being changed!!
+
 namespace mst::winapi::registry {
+
+	using characters_n::operator""_nt;
 
 	// Generally, data consisting of more than one or two kilobytes (K) should be stored as a 
 	//  file and referred to by using a key in the registry rather than being stored as a value. 
@@ -53,11 +60,7 @@ namespace mst::winapi::registry {
 		LSTATUS status;
 		HKEY result;
 
-		//const array<wchar, 35> path { L"Directory\\shell\\mst.menu.openwith\\" };
-		//const array<wchar, 10> newKey { L"sampleKey" };
-		//using namespace characters_n;
-		//using namespace characters_n::operator""_nt;
-		const array<wchar, 57> fullPath { L"Directory\\shell\\mst.menu.openwith\\sampleKey\\subSampleKey" };
+		const array<wchar, 57> fullPath(LR"(Directory\shell\mst.menu.openwith\sampleKey\subSampleKey)");
 
 		status = RegCreateKeyEx(HKEY_CLASSES_ROOT, fullPath.Pointer(), 0, 0, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 0, &result, 0);
 		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success", MB_OK, 0);
@@ -96,8 +99,8 @@ namespace mst::winapi::registry {
 
 	block RemoveRegistryKey(const windowHandle& window) {
 
-		const array<wchar, 57> subKey { L"Directory\\shell\\mst.menu.openwith\\sampleKey\\subSampleKey" };
-		const array<wchar, 44> fullPath { L"Directory\\shell\\mst.menu.openwith\\sampleKey" };
+		const array<wchar, 57> subKey(LR"(Directory\shell\mst.menu.openwith\sampleKey\subSampleKey)");
+		const array<wchar, 44> fullPath(LR"(Directory\shell\mst.menu.openwith\sampleKey)");
 
 		LSTATUS status;
 		

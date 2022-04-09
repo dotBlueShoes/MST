@@ -233,7 +233,31 @@ namespace mst {
 		};
 
 		// Known Termination.
-		constexpr const mst::winapi::wchar* operator ""_nt(const mst::winapi::wchar* string, size length) { return string; };
+		constexpr const mst::winapi::wchar* operator ""_nt(const mst::winapi::wchar* string, size length) { 
+			return string; 
+		};
+
+		//constexpr std::wstring operator ""_nt(const mst::winapi::wchar * string, size length) {
+		//	return std::wstring(string);
+		//};
+
+		//constexpr const std::string operator ""_nt(const char* string, size length) {
+		//	return std::string(string);
+		//};
+
+		//const char[] operator ""_nt(const char* string, size length) {
+		//	char* sample = "wonet return me";
+		//	return sample;
+		//};
+
+		
+		//template <char...> 
+		//char* operator "" _nt();
+
+		//constexpr const std::string operator ""_nt(const char(&notAPointer)[length]) {
+		//	return std::string(string);
+		//};
+		
 
 
 		//array& operator ""_nt(const winapi::wchar * string, size length) { return winapi::wchar(&string); };
