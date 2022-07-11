@@ -350,9 +350,7 @@ namespace mst::winapi::console {
 
 				namespace unsafe {
 					getter size SetTitleLength(const size& titleLength) { return 5 + titleLength; }
-					block SetTitle(command* const command, const string& title) {
-
-						const size titleLength { title.length() };
+					block SetTitle(command* const command, const bufforType* title, const size& titleLength) {
 
 						(*command).SetCurrentElement(L'\x1b');
 						(*command).SetCurrentElement(L']');
@@ -449,20 +447,6 @@ namespace mst::winapi::console {
 			namespace test {
 
 			#define SUCCESS 0 
-
-				uint64 FrameFull(const int16& x, const int16& y, const buffor frame, const size frameLength) {
-					uint32 writtenLength { 0 };
-
-					
-					//const size length = x * y;
-					//buffor data { new bufforType[length] };
-					//for (size i = 0; i < x * y; ++i)
-					//	data[i] = L'*';
-
-					//const command frame { data, length };
-
-					return Write(frame, frameLength);
-				}
 
 				int64 DisplayTextColors() {
 					color textColor { { L'0', L';' }, { L'0', L';' }, { L'0', L'm' } };

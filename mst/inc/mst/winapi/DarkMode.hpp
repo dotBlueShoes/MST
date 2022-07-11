@@ -7,7 +7,7 @@
 //  when we don't have a .lib and we want to comunicate with .dll
 //  we need to manually call "LoadLibrary" and "FreeLibrary" alongside
 //  with GetProcAddress to obtain the address of the functions and data items
-//  stored in the .dll. 
+//  stored in the .dll.
 //  (We also need to cast the returned address to an appropriate pointer-to-function in order)
 
 // 1903, 1809 are specfied here

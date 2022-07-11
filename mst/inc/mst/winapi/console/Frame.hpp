@@ -1,0 +1,25 @@
+#pragma once
+
+#include "../../basictypes.hpp"
+#include "../../array.hpp"
+#include "../types.hpp"
+
+namespace mst::winapi::console::frame {
+
+	using namespace mst::array_n;
+
+	namespace window {
+		const int16 x(140), y(24), bufforLength((x* y));
+
+		// Frames consist of symbol that is being displayed and
+		//  effect that is being set via command. Because the 
+		//  commands amount is to very we're unable to set the size
+		//  of a non character buffor.
+		using frameCharacterBuffor = array<mst::winapi::wchar, bufforLength>;
+		const int64 frameCount(3);
+	}
+
+	uint64 fps = 0;
+	bool isRunning = true;
+
+}

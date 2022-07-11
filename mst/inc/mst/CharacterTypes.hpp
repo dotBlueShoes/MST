@@ -232,8 +232,8 @@ namespace mst {
 			}
 		};
 
-		// Known Termination.
-		constexpr const mst::winapi::wchar* operator ""_nt(const mst::winapi::wchar* string, size length) { 
+		// Known Termination. Use only if you know the length.
+		constexpr const mst::winapi::wchar* operator "" _nt(const wchar_t* string, const size length) { 
 			return string; 
 		};
 

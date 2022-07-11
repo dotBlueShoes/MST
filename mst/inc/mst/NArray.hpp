@@ -18,7 +18,7 @@ namespace mst::nArray_n {
 		template <class T>
 		class nArray {
 
-			using nArray_pointer = const nArray<T>*;
+			using nArrayPointer = const nArray<T>*;
 
 			T* value = nullptr;
 			size length = 0;
@@ -35,7 +35,7 @@ namespace mst::nArray_n {
 
 			constexpr nArray(T* const nPointer, const size& nLength) { value = nPointer; length = nLength; }
 			constexpr nArray(const T& character) { value = new T[1]; value[0] = character; ++length; }
-			constexpr nArray(const std::initializer_list<nArray_pointer> nArrays) {
+			constexpr nArray(const std::initializer_list<nArrayPointer> nArrays) {
 
 				size nLength = 0; for (auto& nArr_pointer : nArrays) nLength += (*nArr_pointer).Length();
 				value = new T[nLength];
@@ -72,6 +72,9 @@ namespace mst::nArray_n {
 	inline namespace safe {
 		template <class T>
 		class nArray {
+
+			using nArrayPointer = const nArray<T>*;
+
 			T* value = nullptr;
 			size length = 0;
 
@@ -97,9 +100,8 @@ namespace mst::nArray_n {
 			//  I would have to make sure that the type takes less then pointer size.
 			//  also i could use an union.
 			constexpr nArray(const T& character) { value = new T[1]; value[0] = character; ++length; }
-
-			using nArray_pointer = const nArray<T>*;
-			constexpr nArray(const std::initializer_list<nArray_pointer> nArrays) {
+			
+			constexpr nArray(const std::initializer_list<nArrayPointer> nArrays) {
 
 				// This constructor is used to avoid temporary creation of nArrays inside initializer_list
 				//  we avoid it by using const pointers. By doing so no 

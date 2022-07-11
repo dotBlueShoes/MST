@@ -36,8 +36,6 @@ using std::is_same;
 
 namespace mst::array_n {
 
-	enum flagUserDefinedLiteral { set };
-
 	template <class T, size length>
 	class array {
 
