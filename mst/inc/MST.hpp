@@ -43,13 +43,13 @@
 
 #include <stdint.h>
 
-#include "mst/characterTypes.hpp"
-#include "mst/basictypes.hpp"
-#include "mst/vector.hpp"
-#include "mst/narray.hpp"
-#include "mst/array.hpp"
-#include "mst/string.hpp"
-#include "mst/thread.hpp"
+#include "MST/CharacterTypes.hpp"
+#include "MST/BasicTypes.hpp"
+#include "MST/Vector.hpp"
+#include "MST/NArray.hpp"
+#include "MST/Array.hpp"
+#include "MST/String.hpp"
+#include "MST/Thread.hpp"
 
 //#include <array>
 //#include <type_traits>
@@ -156,20 +156,20 @@ namespace mst {
 
 	// see what alignas and alignof does
 	namespace samples {
-		size sizeofSample() {
-			int var = 1;
-			return sizeof real32;
-		}
+		//size sizeofSample() {
+		//	int var = 1;
+		//	return sizeof(real32);
+		//}
 
-		struct Sample {
-			uint32 a, b;
-			real32 c;
-		};
+		//struct Sample {
+		//	uint32 a, b;
+		//	real32 c;
+		//};
 
-		uint32 SampleFunc() {
-			Sample sample{};
-			return 0;
-		}
+		//uint32 SampleFunc() {
+		//	Sample sample{};
+		//	return 0;
+		//}
 	}
 
 	namespace flag_n {

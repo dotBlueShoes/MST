@@ -1,5 +1,5 @@
 #pragma once
-#include "types.hpp"
+#include "Types.hpp"
 
 namespace mst::winapi::window {
 
@@ -44,10 +44,10 @@ namespace mst::winapi::window {
 			windowBorderlessStyle = WS_POPUP;
 
 		// Contains information about the placement of the "windowed" window on the screen. Used when switching Fullscreen view.
-		WINDOWPLACEMENT windowedPlacement { sizeof windowedPlacement };
+		WINDOWPLACEMENT windowedPlacement { sizeof(windowedPlacement) };
 
 		// Contains information about the placement of the "fullscreened" window on the single screen. Used when switching Fullscreen view.
-		MONITORINFO monitorInfo { sizeof monitorInfo };
+		MONITORINFO monitorInfo { sizeof(monitorInfo) };
 
 		void Windowed(windowHandle window) {
 			SetWindowLongPtrW(window, GWL_STYLE, windowBorderStyle);						// Changes an attribute of the specified window.
@@ -116,7 +116,7 @@ namespace mst::winapi::window {
 		const brushHandle& backgroundBrush
 	) {
 		windowClass windowProperties;
-		windowProperties.cbSize = { sizeof windowClass };
+		windowProperties.cbSize = { sizeof(windowClass) };
 
 		const iconHandle
 			icon		{ LoadIcon(windowInstance, MAKEINTRESOURCE(iconId)) },
@@ -148,7 +148,7 @@ namespace mst::winapi::window {
 		const wchar* windowTitle,
 		const int32& nCmdShow
 	) {
-		windowHandle window = CreateWindowEx(
+		windowHandle window = CreateWindowExW(
 			WS_EX_APPWINDOW,
 			windowClassName,
 			windowTitle,

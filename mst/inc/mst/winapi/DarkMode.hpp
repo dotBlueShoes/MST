@@ -13,7 +13,7 @@
 // 1903, 1809 are specfied here
 // https://docs.microsoft.com/en-us/windows/win32/accessibility/accessibility-whatsnew
 
-#include "types.hpp"
+#include "Types.hpp"
 
 #include <uxtheme.h>
 
@@ -204,7 +204,7 @@ namespace mst::winapi::window::darkmode {
 	}
 
 	void Initialize() {
-		if (moduleInstance uxtheme { LoadLibraryEx(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32) }) {
+		if (moduleInstance uxtheme { LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32) }) {
 
 			// Getting the functions from the .dll
 			proxy::OpenNcThemeData =						(proxy::openNcThemeData)						GetProcAddress(uxtheme, MAKEINTRESOURCEA(49));
@@ -226,7 +226,7 @@ namespace mst::winapi::window::darkmode {
 				//  yeah most certainly a thing to do one day.
 
 				moduleInstance user32 { nullptr };
-				if (!GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, L"user32.dll", &user32))
+				if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, L"user32.dll", &user32))
 					throw "Module address not found!";
 				else {
 					const char* functionName = "SetWindowCompositionAttribute";
@@ -243,7 +243,7 @@ namespace mst::winapi::window::darkmode {
 
 			
 
-			if (isSupported = proxy::OpenNcThemeData &&
+			if ((isSupported = proxy::OpenNcThemeData) &&
 				proxy::RefreshImmersiveColorPolicyState &&
 				proxy::ShouldAppsUseDarkMode &&
 				proxy::AllowDarkModeForWindow &&

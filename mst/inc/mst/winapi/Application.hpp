@@ -1,7 +1,7 @@
 #pragma once
-#include "types.hpp"
-#include "darkmode.hpp"
-#include "modules.hpp"
+#include "Types.hpp"
+#include "DarkMode.hpp"
+#include "Modules.hpp"
 
 namespace mst::winapi::application {
 	block Initialize() { 

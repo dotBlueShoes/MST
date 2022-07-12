@@ -1,6 +1,6 @@
 #pragma once
-#include "window.hpp"
-#include "theme.hpp"
+#include "Window.hpp"
+#include "Theme.hpp"
 
 #include <uxtheme.h>
 #include <vsstyle.h>
@@ -134,14 +134,14 @@ namespace mst::winapi::window::event::uahmenubar {
 	) {
 		mst::array_n::array<wchar, 256> menuText { L'\0' }; // Get the menu item string
 
-		MENUITEMINFO menuItemInfo { sizeof menuItemInfo, MIIM_STRING };
+		MENUITEMINFOW menuItemInfo { sizeof menuItemInfo, MIIM_STRING };
 		uint32 dwFlags { DT_CENTER | DT_SINGLELINE | DT_VCENTER }; // Get the item state for drawing
-		uint32 iBackgroundStateID { 0 }, iTextStateID { 0 };
+		//uint32 iBackgroundStateID { 0 }, iTextStateID { 0 };
 
 		menuItemInfo.dwTypeData = (LPWSTR)menuText.Pointer();
 		menuItemInfo.cch = ((uint32)menuText.Length() / 2) - 1;
 
-		GetMenuItemInfo(menuItem.um.hmenu, menuItem.umi.iPosition, TRUE, &menuItemInfo);
+		GetMenuItemInfoW(menuItem.um.hmenu, menuItem.umi.iPosition, TRUE, &menuItemInfo);
 
 		switch (menuItem.dis.itemState) {
 			// Default, Inactive
@@ -151,24 +151,24 @@ namespace mst::winapi::window::event::uahmenubar {
 			case 0x0180:
 				FillRect(menuItem.um.hdc, &menuItem.dis.rcItem, brush.Get());
 				// Here would be the call to make the border underneeth reappear. as if wndproc can be dyn changed i would even propose a different function for such.
-				iBackgroundStateID = MPI_NORMAL;
-				iTextStateID = MPI_NORMAL;
+				//iBackgroundStateID = MPI_NORMAL;
+				//iTextStateID = MPI_NORMAL;
 				break;
 
 			// Hot
 			case 0x0040:
 			case 0x0140:
 				FillRect(menuItem.um.hdc, &menuItem.dis.rcItem, brushHovered.Get());
-				iBackgroundStateID = MPI_HOT;
-				iTextStateID = MPI_HOT;
+				//iBackgroundStateID = MPI_HOT;
+				//iTextStateID = MPI_HOT;
 				break;
 
 			// Hot & Inactive
 			case 0x00c0:
 			case 0x01c0:
 				FillRect(menuItem.um.hdc, &menuItem.dis.rcItem, brushHovered.Get());
-				iBackgroundStateID = MPI_HOT;
-				iTextStateID = MPI_HOT;
+				//iBackgroundStateID = MPI_HOT;
+				//iTextStateID = MPI_HOT;
 				break;
 
 			// Select
@@ -176,8 +176,8 @@ namespace mst::winapi::window::event::uahmenubar {
 			case 0x0101:
 				FillRect(menuItem.um.hdc, &menuItem.dis.rcItem, brushSelected.Get());
 				// MENU_POPUPITEM has no state for this, though MENU_BARITEM does
-				iBackgroundStateID = MPI_HOT;
-				iTextStateID = MPI_HOT;
+				//iBackgroundStateID = MPI_HOT;
+				//iTextStateID = MPI_HOT;
 				break;
 
 			// Disabled & Grayed
@@ -185,8 +185,8 @@ namespace mst::winapi::window::event::uahmenubar {
 			case 0x0102:
 			case 0x0004:
 			case 0x0104: {
-				iBackgroundStateID = MPI_DISABLED;
-				iTextStateID = MPI_DISABLED;
+				//iBackgroundStateID = MPI_DISABLED;
+				//iTextStateID = MPI_DISABLED;
 				if (!menuTheme) menuTheme = OpenThemeData(window, L"Menu");
 				DTTOPTS opts { sizeof opts, DTT_TEXTCOLOR, RGB(0x40, 0x40, 0x40) };
 				DrawThemeTextEx(menuTheme, menuItem.um.hdc, MENU_BARITEM, MBI_NORMAL, menuText.Pointer(), menuItemInfo.cch, dwFlags, &menuItem.dis.rcItem, &opts);
@@ -200,7 +200,7 @@ namespace mst::winapi::window::event::uahmenubar {
 				break;
 
 			default:
-				MessageBoxEx(window, L"Unspecified menu item state.", L"Error", MB_OK, 0);
+				MessageBoxExW(window, L"Unspecified menu item state.", L"Error", MB_OK, 0);
 				break;
 
 			

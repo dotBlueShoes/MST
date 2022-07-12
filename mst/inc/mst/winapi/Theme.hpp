@@ -1,5 +1,5 @@
 #pragma once
-#include "darkmode.hpp"
+#include "DarkMode.hpp"
 
 namespace mst::winapi::window::theme {
 
@@ -25,8 +25,8 @@ namespace mst::winapi::window::theme {
 			backgroundSelected(newBackgroundSelected),
 			backgroundHovered(newBackgroundHovered),
 			backgroundPrimary(newBackgroundPrimary),
-			textPrimary(newTextPrimary),
-			borderColor(newBorderColor)
+			borderColor(newBorderColor),
+			textPrimary(newTextPrimary)
 		{}
 
 	};

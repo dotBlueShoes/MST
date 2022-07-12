@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../console.hpp"
-#include "frame.hpp"
+#include "../Console.hpp"
+#include "Frame.hpp"
 
 namespace mst::winapi::console::draw {
 

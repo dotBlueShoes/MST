@@ -1,13 +1,13 @@
 #pragma once
-#include "winapi/types.hpp"
-#include "winapi/modules.hpp"
-#include "winapi/window.hpp"
-#include "winapi/theme.hpp"
-#include "winapi/uahmenubar.hpp"
-#include "winapi/application.hpp"
-#include "winapi/registry.hpp"
-#include "charactertypes.hpp"
-#include "array.hpp"
+#include "WinAPI/Types.hpp"
+#include "WinAPI/Modules.hpp"
+#include "WinAPI/Window.hpp"
+#include "WinAPI/Theme.hpp"
+#include "WinAPI/UAHMenuBar.hpp"
+#include "WinAPI/Application.hpp"
+#include "WinAPI/Registry.hpp"
+#include "CharacterTypes.hpp"
+#include "Array.hpp"
 
 using namespace mst::array_n;
 
@@ -87,7 +87,7 @@ namespace mst {
 		}
 
 		namespace accelerator {
-			inline auto Load(handleInstnace& instance, wchar* identifier) { return LoadAccelerators(instance, identifier); }
+			inline auto Load(handleInstnace& instance, wchar* identifier) { return LoadAcceleratorsW(instance, identifier); }
 			inline auto Translate(windowHandle& window, keysMapHandle& keys, retrivedMessage& retrived) { return TranslateAccelerator(window, keys, &retrived); }
 		}
 

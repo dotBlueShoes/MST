@@ -1,7 +1,8 @@
 #pragma once
-#include "types.hpp"
-#include "../charactertypes.hpp"
+#include "Types.hpp"
+#include "../CharacterTypes.hpp"
 
+#include <libloaderapi.h>
 #include <commctrl.h>
 #include <richedit.h>
 
@@ -13,16 +14,16 @@ namespace mst::winapi::modules {
 	moduleInstance msftedit { nullptr };
 
 	block LoadModule(moduleInstance& module, const wchar* dll, void (*f) (void)) {
-		if (module = LoadLibrary(dll)) { f(); return; }
+		if ((module = LoadLibraryW(dll))) { f(); return; }
 		// If the needed DLL won't be found.
-		MessageBoxEx(nullptr, generalError.Pointer(), dll, MB_OK, 0);
+		MessageBoxExW(nullptr, generalError.Pointer(), dll, MB_OK, 0);
 		throw;
 	}
 
 	block LoadModule(moduleInstance& module, const wchar* dll) {
-		if (module = LoadLibrary(dll)) return;
+		if ((module = LoadLibraryW(dll))) return;
 		// If the needed DLL won't be found.
-		MessageBoxEx(nullptr, generalError.Pointer(), dll, MB_OK, 0);
+		MessageBoxExW(nullptr, generalError.Pointer(), dll, MB_OK, 0);
 		throw;
 	}
 

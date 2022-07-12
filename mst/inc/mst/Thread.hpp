@@ -1,6 +1,6 @@
 #pragma once
 
-#include "basictypes.hpp"
+#include "BasicTypes.hpp"
 
 #undef rename
 #include <thread>

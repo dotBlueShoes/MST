@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../basictypes.hpp"
-#include "../../array.hpp"
-#include "../types.hpp"
+#include "../../BasicTypes.hpp"
+#include "../../Array.hpp"
+#include "../Types.hpp"
 
 namespace mst::winapi::console::frame {
 

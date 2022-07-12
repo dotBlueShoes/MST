@@ -7,11 +7,11 @@
 //
 #pragma once
 
-#include "../winapi.hpp"
-#include "../narray.hpp"
-#include "../charactertypes.hpp"
-#include "../string.hpp"
-#include "../thread.hpp"
+#include "../WinAPI.hpp"
+#include "../NArray.hpp"
+#include "../CharacterTypes.hpp"
+#include "../String.hpp"
+#include "../Thread.hpp"
 
 #undef rename
 #include <iostream>
@@ -366,11 +366,11 @@ namespace mst::winapi::console {
 					getter size SetTextColorLength(const color& textColor) { return 7 + textColor.red.length + textColor.green.length + textColor.blue.length; }
 					block SetTextColor(command& command, const color& textColor) {
 
-						const size length { 7 +
-							textColor.red.length +
-							textColor.green.length +
-							textColor.blue.length 
-						};
+						//const size length { 7 +
+						//	textColor.red.length +
+						//	textColor.green.length +
+						//	textColor.blue.length 
+						//};
 
 						command.SetCurrentElement(L'\x1b');
 						command.SetCurrentElement(L'[');
@@ -393,11 +393,11 @@ namespace mst::winapi::console {
 					getter size SetTextBackgroundColorLength(const color& textColor) { return 7 + textColor.red.length + textColor.green.length + textColor.blue.length; }
 					block SetTextBackgroundColor(command& command, const color& textColor) {
 
-						const size length { 7 +
-							textColor.red.length +
-							textColor.green.length +
-							textColor.blue.length 
-						};
+						//const size length { 7 +
+						//	textColor.red.length +
+						//	textColor.green.length +
+						//	textColor.blue.length 
+						//};
 
 						command.SetCurrentElement(L'\x1b');
 						command.SetCurrentElement(L'[');
@@ -419,7 +419,7 @@ namespace mst::winapi::console {
 
 					getter size SetCursorPositionLength(const decimal<bufforType>& x, const decimal<bufforType>& y) { return 2 + x.length + y.length; }
 					block SetCursorPosition(command& command, const decimal<bufforType>& x, const decimal<bufforType>& y) {
-						const size length { 2 + x.length + y.length };
+						//const size length { 2 + x.length + y.length };
 
 						command.SetCurrentElement(L'\x1b');
 						command.SetCurrentElement(L'[');
@@ -654,7 +654,9 @@ namespace mst::winapi::console {
 		block GetCurrentFont(font& fontStruct, const consoleInfo& consoleInfo) {
 			size length { 0 };
 
-			for (; consoleInfo.fontInfo.FaceName[length] != L'\0'; ++length); ++length;
+			for (; consoleInfo.fontInfo.FaceName[length] != L'\0'; ++length);
+			; ++length;
+			
 			fontStruct.faceName.length = length;
 
 			for (size i = 0; i < length; i++)
@@ -719,7 +721,7 @@ namespace mst::winapi::console {
 
 		block ChangeEqualConsoleSize(const int16& x, const int16& y) {
 			namespace co = console::output;
-			const winapi::smallRect windowSize { 0, 0, x - 1, y - 1 }; // 0, 0 means something windowsOS just decide what position yourself.
+			const winapi::smallRect windowSize { 0, 0, int16(x - 1), int16(y - 1) }; // 0, 0 means something windowsOS just decide what position yourself.
 			const winapi::coord bufforSize { x, y };
 
 			// If bufor orginalnie jest mniejszy od nowych rozmiarów okna, to

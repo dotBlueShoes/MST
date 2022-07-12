@@ -14,7 +14,7 @@ namespace mst {
 	// force-inline is a msvs thing that might force a thing a little.
 	// * Pretty much just for accesing a private memeber.
 #define getter [[nodiscard]] __forceinline constexpr 
-#define proxyf __forceinline constexpr
+#define proxyf __forceinline
 
 #ifdef deprecated
 #define deprecated [[deprecated]]

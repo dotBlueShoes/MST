@@ -1,6 +1,6 @@
 #pragma once
 
-#include "basictypes.hpp"
+#include "BasicTypes.hpp"
 
 // Array where both value and length can be changed.
 //  uses new and delete underneath.

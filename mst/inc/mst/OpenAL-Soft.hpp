@@ -1,2 +1,2 @@
 #pragma once
-#include "openal-soft/types.hpp"
+#include "OpenAL-Soft/Types.hpp"

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "types.hpp"
-#include "..\array.hpp"
+#include "Types.hpp"
+#include "..\Array.hpp"
 #include "..\CharacterTypes.hpp"
 
 // HERE!
@@ -62,11 +62,11 @@ namespace mst::winapi::registry {
 
 		const array<wchar, 57> fullPath(LR"(Directory\shell\mst.menu.openwith\sampleKey\subSampleKey)");
 
-		status = RegCreateKeyEx(HKEY_CLASSES_ROOT, fullPath.Pointer(), 0, 0, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 0, &result, 0);
-		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Success", MB_OK, 0);
+		status = RegCreateKeyExW(HKEY_CLASSES_ROOT, fullPath.Pointer(), 0, 0, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 0, &result, 0);
+		if (status == ERROR_SUCCESS) MessageBoxExW(window, L"Main", L"Success", MB_OK, 0);
 
 		status = RegCloseKey(result);
-		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Close", MB_OK, 0);
+		if (status == ERROR_SUCCESS) MessageBoxExW(window, L"Main", L"Close", MB_OK, 0);
 
 		// \\shell\\mst.menu.openwith
 
@@ -104,11 +104,11 @@ namespace mst::winapi::registry {
 
 		LSTATUS status;
 		
-		status = RegDeleteKeyEx(HKEY_CLASSES_ROOT, subKey.Pointer(), KEY_WOW64_64KEY, 0);
-		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Remove1", MB_OK, 0);
+		status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, subKey.Pointer(), KEY_WOW64_64KEY, 0);
+		if (status == ERROR_SUCCESS) MessageBoxExW(window, L"Main", L"Remove1", MB_OK, 0);
 
-		status = RegDeleteKeyEx(HKEY_CLASSES_ROOT, fullPath.Pointer(), KEY_WOW64_64KEY, 0);
-		if (status == ERROR_SUCCESS) MessageBoxEx(window, L"Main", L"Remove2", MB_OK, 0);
+		status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, fullPath.Pointer(), KEY_WOW64_64KEY, 0);
+		if (status == ERROR_SUCCESS) MessageBoxExW(window, L"Main", L"Remove2", MB_OK, 0);
 
 	}
 

@@ -1,8 +1,8 @@
 // Windows types https://docs.microsoft.com/en-us/windows/win32/winprog/windows-data-types
 
 #pragma once
-#include "../basictypes.hpp"
-#include "../array.hpp"
+#include "../BasicTypes.hpp"
+#include "../Array.hpp"
 #include <windows.h>
 
 namespace mst::winapi {

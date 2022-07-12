@@ -1,8 +1,8 @@
 #pragma once
 
-#include "basictypes.hpp"
+#include "BasicTypes.hpp"
 #include <initializer_list>
-#include "winapi/types.hpp"
+#include "WinAPI/Types.hpp"
 
 namespace mst {
 	namespace characters_n {
