@@ -9,7 +9,7 @@ namespace mst::winapi::console::frame {
 	using namespace mst::array_n;
 
 	namespace window {
-		const int16 x(140), y(24), bufforLength((x* y));
+		const int16 x(140), y(24), bufforLength((x * y));
 
 		// Frames consist of symbol that is being displayed and
 		//  effect that is being set via command. Because the 

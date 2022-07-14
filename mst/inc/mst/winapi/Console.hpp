@@ -50,11 +50,14 @@
 // Therefore it isn't needed to have a custom system around it.
 //  Which leads to assumtion that i can freely connect as many string as i want and fluch them
 //  whit this function whenever i wanted.
-*/
-//MoveWindow(GetConsoleWindow(), windowRect.left, windowRect.top, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, true);
 
+*/
+
+//MoveWindow(GetConsoleWindow(), windowRect.left, windowRect.top, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, true);
 // About Fonts...
+
 /*
+
 // About Font Customization in Windows Console.
 //	raster font or true type / open type are possible if monospaced.
 //	letter spacing cannot be done in console.
@@ -84,6 +87,8 @@ namespace mst::winapi::console {
 		uint32 fontFamily { FF_DONTCARE };
 		uint32 fontWeight { FW_NORMAL };
 	};
+	
+	winapi::windowHandle window;
 
 	#ifdef LOGGER
 	namespace logger {
@@ -215,7 +220,7 @@ namespace mst::winapi::console {
 
 				retriver command SetTitle(const bufforType* title, const size& titleLength) {
 
-					const size length { 5 + titleLength };
+					const size length { 6 + titleLength };
 					buffor temp { new bufforType[length] };
 
 					temp[0] = L'\x1b';
@@ -687,17 +692,26 @@ namespace mst::winapi::console {
 			fontInfo.FontWeight = newFont.fontWeight;
 
 			wcscpy_s(fontInfo.FaceName, newFont.faceName.length, newFont.faceName.value);
-			if (!SetCurrentConsoleFontEx(outputHandle, false, &fontInfo))
+			if (!SetCurrentConsoleFontEx(outputHandle, false, &fontInfo)) {
+				array<wchar, 27> errorMSG(L"Failed To Change the Font.");
 				std::cerr << "Failed To Change the Font.";
+				MessageBoxExW(nullptr, errorMSG.Pointer(), L"ERROR", MB_OK, 0);
+			}
+				
 		}
 
 		block GetCurrentConsoleSize(winapi::smallRect& windowRect, const consoleInfo& consoleInfo) {
 			windowRect = consoleInfo.bufferInfo.srWindow;
 		}
 
-		block ChangeConsoleSize(SMALL_RECT windowRect) {
-			if (!SetConsoleWindowInfo(outputHandle, true, &windowRect))
+		block ChangeConsoleSize(const int16& x, const int16& y) {
+			SMALL_RECT sample { 0, 0, x, y };
+			std::cerr << sample.Right << ' ' << sample.Bottom << '\n';
+			if (!SetConsoleWindowInfo(outputHandle, true, &sample)) {
+				array<wchar, 37> errorMSG(L"Failed to change console rows/cols.\t");
 				std::cerr << "Failed to change console rows/cols.\t" << GetLastError() << '\n';
+				MessageBoxExW(nullptr, errorMSG.Pointer(), L"ERROR", MB_OK, 0);
+			}
 		}
 
 		block GetCurrentBufferSize(winapi::coord& bufforSize, const consoleInfo& consoleInfo) {
@@ -714,29 +728,44 @@ namespace mst::winapi::console {
 		}
 
 		// Note that buffor therefore function 'size' parameter connot be smaller from the window size.
-		block ChangeBufferSize(COORD newSize) {
-			if (!SetConsoleScreenBufferSize(outputHandle, newSize))
+		block ChangeBufferSize(const int16& x, const int16& y) {
+			COORD sample { 140, y };
+			std::cerr << sample.X << ' ' << sample.Y << '\n';
+			//COORD sample { 200, 200 }; //{140, 24};
+			if (!SetConsoleScreenBufferSize(outputHandle, sample)) {
+				array<wchar, 44> errorMSG(L"Failed to change console buffer rows/cols.\t");
 				std::cerr << "Failed to change console buffer rows/cols.\t" << GetLastError() << '\n';
+				MessageBoxExW(nullptr, errorMSG.Pointer(), L"ERROR", MB_OK, 0);
+			}
 		}
 
 		block ChangeEqualConsoleSize(const int16& x, const int16& y) {
 			namespace co = console::output;
-			const winapi::smallRect windowSize { 0, 0, int16(x - 1), int16(y - 1) }; // 0, 0 means something windowsOS just decide what position yourself.
-			const winapi::coord bufforSize { x, y };
 
-			// If bufor orginalnie jest mniejszy od nowych rozmiarów okna, to
-			// - najpierw zmieniamy rozmiar bufora.
-			// If bufor orginalnie jest wiêkszy od nowych rozmiarów okna, to
-			// - najpierw zmieniamy rozmiar okna.
-
-			if (co::previousConsoleSetup.bufferSize.X < bufforSize.X ||
-				co::previousConsoleSetup.bufferSize.Y < bufforSize.Y) {
-				co::ChangeBufferSize(bufforSize);
-				co::ChangeConsoleSize(windowSize);
-			} else {
-				co::ChangeConsoleSize(windowSize);
-				co::ChangeBufferSize(bufforSize);
+			// 1. We need to ensure that buffer is >= windowSize in text columns and rows.
+			// 2. Because methods we use change both x and y at the same time
+			//  we need to be aware that somethimes the new size can be 
+			//  a) bigger/smaller at X
+			//  b) bigger/smaller at Y
+			//  and because function order depends on that we cannot allow a situation where
+			//  on X is bigger & on Y is smaller and vice versa. 
+			
+			if (x > previousConsoleSetup.bufferSize.X) { 	// When we're expending console's X.
+				co::ChangeBufferSize(x, previousConsoleSetup.bufferSize.Y);
+				co::ChangeConsoleSize(int16(x - 1), previousConsoleSetup.consoleSize.Bottom);
+			} else { 										// When we're decrease console's X.
+				co::ChangeConsoleSize(int16(x - 1), previousConsoleSetup.consoleSize.Bottom);
+				co::ChangeBufferSize(x, previousConsoleSetup.bufferSize.Y);
 			}
+				
+			if (y > previousConsoleSetup.bufferSize.Y) { 	// When we're expending console's Y.
+				co::ChangeBufferSize(x, y);
+				co::ChangeConsoleSize(int16(x - 1), int16(y - 1));
+			} else { 										// When we're decrease console's Y.
+				co::ChangeConsoleSize(int16(x - 1), int16(y - 1));
+				co::ChangeBufferSize(x, y);
+			}
+			
 		}
 
 		namespace screen {
@@ -769,6 +798,20 @@ namespace mst::winapi::console {
 		block Initialize() {
 			const uint32 virtualTerminalProcessing { ENABLE_VIRTUAL_TERMINAL_PROCESSING };				// Allows use of string commands that are passed via simple "WriteConsole" call.
 			outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+			
+			//if (outputHandle & GENERIC_READ) std::cerr << "HERE!\n";
+			
+			//Getting HInstance just for icon set.
+			#pragma GCC diagnostic push
+			#pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
+			window = GetConsoleWindow();
+			winapi::handleInstnace instance { (winapi::handleInstnace)GetWindowLongW(window, -6) };
+			HICON hIcon = LoadIcon(instance, IDI_SHIELD);
+			if (hIcon) {
+				SendMessage(window, WM_SETICON, ICON_SMALL, (LPARAM)hIcon); // Window Icon
+				SendMessage(window, WM_SETICON, ICON_BIG, (LPARAM)hIcon); // TaskBar icon
+			}
+			#pragma GCC diagnostic pop
 
 			GetConsoleMode(outputHandle, reinterpret_cast<LPDWORD>(&previousConsoleSetup.outputMode));										// Fetch existing console mode so we correctly add a flag and not turn off others.
 			SetConsoleMode(outputHandle, previousConsoleSetup.outputMode | virtualTerminalProcessing);			// Set the new mode.
@@ -787,8 +830,9 @@ namespace mst::winapi::console {
 		block Destroy() {
 			SetConsoleMode(outputHandle, previousConsoleSetup.outputMode);										// Restore the mode on the way out to be nice to other command-line applications.
 
-			ChangeConsoleSize(previousConsoleSetup.consoleSize);
-			ChangeBufferSize(previousConsoleSetup.bufferSize);
+			////OMGGGGG
+			ChangeConsoleSize(previousConsoleSetup.consoleSize.Right, previousConsoleSetup.consoleSize.Bottom);
+			ChangeBufferSize(previousConsoleSetup.bufferSize.X, previousConsoleSetup.bufferSize.Y);
 			ChangeFont(previousConsoleSetup.font);
 
 			command::Write(command::textFormattingNormal.Pointer(), command::textFormattingNormal.Length());			// To restore text to normal.

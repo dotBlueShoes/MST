@@ -23,11 +23,11 @@ namespace mst::winapi::console::draw {
 		const wchar& character,
 		const uint64& posX, 
 		const uint64& posY, 
-		const uint64& length, 
+		const uint64& width, 
 		const uint64& height
 	) {
 		
-		if /* constexpr */ (posX + length > winapi::console::frame::window::x ||
+		if /* constexpr */ (posX + width > winapi::console::frame::window::x ||
 			posY + height > winapi::console::frame::window::y) throw;
 
 		// Example
@@ -35,7 +35,7 @@ namespace mst::winapi::console::draw {
 		// 121. 122. 123. 124. 125. 126. 127. 128. 129. 130. 240
 		// 241.
 
-		for (size i = posX; i < posX + length; ++i)
+		for (size i = posX; i < posX + width; ++i)
 			for (size j = posY * winapi::console::frame::window::x; j < ((posY + height) * winapi::console::frame::window::x); j += winapi::console::frame::window::x)
 				buffer[i + j] = character;
 
@@ -66,6 +66,8 @@ namespace mst::winapi::console::draw {
 		//  - https://stackoverflow.com/questions/2808398/easily-measure-elapsed-time
 		//  - https://en.cppreference.com/w/cpp/chrono/steady_clock/now
 		//  - https://en.cppreference.com/w/cpp/chrono/duration
+		
+		// This is where i apply colors for testing!
 
 		coc::command setTextColorR { coc::construct::SetTextColor(color::red) };
 		coc::command setTextColorG { coc::construct::SetTextColor(color::green) };
@@ -82,7 +84,6 @@ namespace mst::winapi::console::draw {
 
 		coc::command output { &setTextColorR, &text1, &setTextColorG, &text2 };
 		console::output::command::Write(output.Pointer(), output.Length());
-		//console::output::command::Write(frame[0].Pointer(), frame[0].Length());
 	}
 
 	block MainLoop(const frame::window::frameCharacterBuffor* frames) {
@@ -90,6 +91,11 @@ namespace mst::winapi::console::draw {
 		// Game Loop
 		auto begin = std::chrono::steady_clock::now();
 		uint64 fpsCount = 0;
+		
+		// Theres an ERROR with an I and bell sound appearing !
+		//  also double square sign was seen.
+		// I ALSO SHOUD HAVE LOGIC TO PUT THE BUFFOR THATS INSIDE Uint64ToWchars HERE!
+		array<winapi::wchar, 10> buffor;
 
 		while (frame::isRunning) {
 			RedrawScreen(frames);
@@ -108,10 +114,9 @@ namespace mst::winapi::console::draw {
 					fpsCount = 0;
 
 					{ // Set Title.
-						array<winapi::wchar, 10> buffor;
-						winapi::Uint64ToWcharsTerminated(buffor, frame::fps, '\0');
+						uint64 length = winapi::Uint64ToWchars(buffor, frame::fps);
 
-						coc::command setTitle { coc::construct::SetTitle(buffor.Pointer(), buffor.Length()) };
+						coc::command setTitle { coc::construct::SetTitle(buffor.Pointer(), length) };
 						coc::Write(setTitle.Pointer(), setTitle.Length());
 					}
 				}

@@ -36,15 +36,16 @@ namespace mst {
 
 		const wchar wcharTerminator = '\0';
 
+		// THIS FUNCTION MIGHT NOT RUN AS SUPPOSED !!!
 		template <size arrSize>
 		inline constexpr void Uint64ToWcharsTerminated(
 			array<wchar, arrSize>& buffor,
 			uint64 rawValue,
 			const wchar& endSign = wcharTerminator
 		) {
-			array<wchar, arrSize> tempBuffor;										// Reverse next logic use.
-			wchar* const tempBufforEnd = tempBuffor.Pointer() + tempBuffor.Length();
-			wchar* rNext = tempBufforEnd;
+			array<wchar, arrSize> tempBuffor; // Reverse next logic use.
+			wchar* const tempBufforEnd ( tempBuffor.Pointer() + tempBuffor.Length() );
+			wchar* rNext ( tempBufforEnd );
 
 			// Termination
 			*(--rNext) = endSign;
@@ -63,21 +64,32 @@ namespace mst {
 			}
 		}
 
+		// THIS FUNCTION MIGHT NOT RUN AS SUPPOSED !!!
 		template <size arrSize>
-		inline constexpr void Uint64ToWchars(
+		inline constexpr uint64 Uint64ToWchars(
 			array<wchar, arrSize>& buffor,
 			uint64 rawValue
 		) {
-			const size wcharTypeLength = 16;
-			array<wchar, arrSize> tempBuffor;									// Reverse next logic use.
-			wchar* rNext = tempBuffor.Pointer() + tempBuffor.Length() - wcharTypeLength;
+			array<wchar, arrSize> tempBuffor; // Reverse next logic use.
+			wchar* const tempBufforEnd ( tempBuffor.Pointer() + tempBuffor.Length() );
+			wchar* rNext ( tempBufforEnd );
+			uint64 length ( 0 );
 
 			do {
 				*(--rNext) = (wchar)(L'0' + rawValue % 10);
 				rawValue /= 10;
+				length++;
 			} while (rawValue != 0);
 
-			memcpy(buffor.Pointer(), tempBuffor.Pointer(), sizeof buffor);
+			{
+				// Don't know why byt for some reason A - 0 = 5 and not 10... 
+				//  i dont know why but i need to double it. 
+				//  I guess ptrdiff_t works diff then i thought.
+				const ptrdiff_t digitsWritten = tempBufforEnd - rNext; 
+				memcpy(buffor.Pointer(), rNext, (size)(digitsWritten) * 2);
+			}
+			
+			return length;
 		}
 
 		namespace message {
