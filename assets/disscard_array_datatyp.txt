@@ -1,0 +1,31 @@
+DiscardArray
+
+- A datatype that contains elements with the length of known size.
+- Has a C array underneath
+
+
+[przyk³ad pliku zawieraj¹cego (inty) co linika]
+1. Przechodz¹c przez plik do jego koñca liczê wyst¹pienia datatypu (w tym przypadku jest to co linikê).
+2. Maj¹c iloœæ elementów zapisuje j¹ jako d³ugoœæ "RejectArray".
+3. Kolejno od koñca pliku do jego pocz¹tku zapisuje wyst¹pione int'y i informacje o 'rejectLength'.
+4. Maj¹c gotowy datatyp przystêpuje do odczytania z niego informacji.
+5. Wczytuje ostatni element (pierwszy) i go odczytuje.
+6. wczytuje input wartoœæ (1-rejectLength)
+7. Usuwam ostatni element i input elementów od niego w dó³. po czym ustawiam wskaŸnik ostatiego elementu na nowy ostatni element. usuwam elementy [rejectLength-input]
+
+
+
+language - entry type identifying that this is the app entry 
+(only one type in project can have this type)
+
+.dlg ([dialog]binary file)
+1 byte - positon of first dialog sequance
+2 byte - position of third dialog sequance
+....
+n byte - separator
+first dialog sequance
+second dialog sequance
+...
+EOF
+
+.dlg (64binary file)

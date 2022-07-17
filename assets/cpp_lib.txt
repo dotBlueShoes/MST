@@ -1,0 +1,18 @@
+Making a CPP release
+ : building and relesing library
+ : working with that library in different project
+	: setting paths 
+	: putting the dll file in the right catalog in release
+: making it into git and providing version control - so things like downloading a .dll file from git repo as i create a new project.
+
+
+Lib Idea
+ "Matthew Strumi³³o Types"
+ : createion and use of these:
+	mst.hpp
+	mst.lib
+	mst.dll
+ : The library contains
+	my defined types
+	bool64 API
+	other (like forever keyword)

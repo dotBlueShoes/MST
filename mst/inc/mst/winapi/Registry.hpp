@@ -1,5 +1,7 @@
 #pragma once
 
+#include <winreg.h>
+
 #include "Types.hpp"
 #include "..\Array.hpp"
 #include "..\CharacterTypes.hpp"
