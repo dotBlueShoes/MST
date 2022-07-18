@@ -2,8 +2,10 @@
 /build/
 
 # Personal stuff.
-/.ninja/secret.ninja
+.ninja/secret.ninja
+.obsidian/
 
+*.zip
 *.exe
 *.npp
 *.ninja_log

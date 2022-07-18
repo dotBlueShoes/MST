@@ -110,7 +110,7 @@ namespace mst {
 
 		inline constexpr auto GetMenuInput(messageW& w) { return LOWORD(w); }
 		inline auto DefaultWindowProcedure(windowHandle& window, uint32& message, messageW& w, messageL& l) { 
-			return DefWindowProc(window, message, w, l); }
+			return DefWindowProcW(window, message, w, l); }
 
 	}
 }

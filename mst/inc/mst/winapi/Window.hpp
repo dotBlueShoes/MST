@@ -148,6 +148,9 @@ namespace mst::winapi::window {
 		const wchar* windowTitle,
 		const int32& nCmdShow
 	) {
+		//WCHAR windowTitle[100];
+		//LoadStringW(windowInstance, 103, windowTitle, 100);
+		
 		windowHandle window = CreateWindowExW(
 			WS_EX_APPWINDOW,
 			windowClassName,
