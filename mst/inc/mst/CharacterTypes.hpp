@@ -20,6 +20,9 @@ namespace mst::characters_n {
 		public:
 			T* characters = nullptr;
 			size length = 0;
+			
+			// Empty Constructor. Value is not being initialized. ( e.g. decimal (); )
+			constexpr decimal() { /* std::cerr << "a\a"; */ }
 	
 			decimal(const std::initializer_list<T> list) {
 				characters = new T[list.size()];
@@ -54,7 +57,9 @@ namespace mst::characters_n {
 			//		characters[length] = other.characters[length];
 			//}
 
-			~decimal() { delete[] characters; }
+			// !!!!!!!
+			~decimal() {}
+			//~decimal() { delete[] characters; }
 
 			// This is copy. As said it requires characters to exist.
 			decimal& operator=(const std::initializer_list<T> other) {

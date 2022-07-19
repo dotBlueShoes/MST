@@ -16,8 +16,11 @@ namespace mst::winapi::console::draw {
 	}
 
 	block Fullfil(brush* buffer, const brush& nBrush) {
-		for (size i = 0; i < winapi::console::frame::window::bufforLength; ++i)
+		for (size i = 0; i < winapi::console::frame::window::bufforLength; ++i) {
 			buffer[i].character = nBrush.character;
+			buffer[i].characterColor = nBrush.characterColor;
+			buffer[i].backgroundColor = nBrush.backgroundColor;
+		}
 	}
 	
 
@@ -39,12 +42,15 @@ namespace mst::winapi::console::draw {
 		// 241.
 
 		for (size i = posX; i < posX + width; ++i)
-			for ( size j = posY * winapi::console::frame::window::x; j < ((posY + height) * winapi::console::frame::window::x); j += winapi::console::frame::window::x )
+			for ( size j = posY * winapi::console::frame::window::x; j < ((posY + height) * winapi::console::frame::window::x); j += winapi::console::frame::window::x ) {
 				buffer[i + j].character = nBrush.character;
+				buffer[i + j].characterColor = nBrush.characterColor;
+				buffer[i + j].backgroundColor = nBrush.backgroundColor;
+			}
 
 	}
 
-	block RedrawScreen(const frame::window::frameCharacterBuffor* frames) {
+	block RedrawScreen(const frame::window::frameCharacterBuffor& frame) {
 		namespace coc = console::output::command;
 		// This sample code gives us information of:
 		//  1. We cannot refer to frame size when counting virtual terminal functionality e.g. color changing.
@@ -72,24 +78,24 @@ namespace mst::winapi::console::draw {
 		
 		// This is where i apply colors for testing!
 
-		//coc::command setTextColorR ( coc::construct::SetTextColor ( color::red ) );
+		coc::command setTextColor ( coc::construct::SetTextColor ( frame[0].backgroundColor ) );
 		//coc::command setTextColorG { coc::construct::SetTextColor(color::green) };
 
-		const size length ( frames[0].Length() );
+		const size length ( frame.Length() );
 		coc::command text1 ( length );
 
 		for (size i = 0; i < length; ++i)
-			text1.SetCurrentElement(frames[0].Pointer()[i].character);
+			text1.SetCurrentElement(frame.Pointer()[i].character);
 
 		//coc::command text2(length);
 		//for (size i = length; i < 2 * length; ++i)
 		//	text2.SetCurrentElement(frames[0].Pointer()[i]);
 
-		coc::command output { /*&setTextColorR,*/ &text1 /*, &setTextColorG, &text2*/ };
+		coc::command output { &setTextColor, &text1 /*, &setTextColorG, &text2*/ };
 		console::output::command::Write(output.Pointer(), output.Length());
 	}
 
-	block MainLoop(const frame::window::frameCharacterBuffor* frames) {
+	block MainLoop(const frame::window::frameCharacterBuffor& frame) {
 
 		// Game Loop
 		auto begin = std::chrono::steady_clock::now();
@@ -101,7 +107,7 @@ namespace mst::winapi::console::draw {
 		array<winapi::wchar, 10> buffor;
 
 		while (frame::isRunning) {
-			RedrawScreen(frames);
+			RedrawScreen(frame);
 
 			{ // Frame Count
 

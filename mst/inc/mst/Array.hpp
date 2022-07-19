@@ -1,13 +1,13 @@
 #pragma once
 
-#include "BasicTypes.hpp"
 
 #undef rename
 #include <utility>
-#undef rename
-#define rename __forceinline
+#include "BasicTypes.hpp"
 
 #include <type_traits>
+using std::make_index_sequence;
+using std::index_sequence;
 using std::conjunction_v;
 using std::is_same;
 
@@ -21,7 +21,7 @@ namespace mst::array_n {
 
 		// Forwarded Constructor. used by "Initialization list Constructor via Forwarding Constructor" constructor.
 		template <size ... index>
-		constexpr array(const T* const pointer, std::index_sequence<index...>) : value { pointer[index]... } {}
+		constexpr array(const T* const pointer, index_sequence<index...>) : value { pointer[index]... } {}
 
 	public:
 
@@ -34,7 +34,7 @@ namespace mst::array_n {
 		constexpr array(const T& singleValue) : value { singleValue } {}
 
 		// Initialization list Constructor via Forwarding Constructor. ( e.g. array ( "Sample" ); )
-		constexpr array(const T* const pointer) : array(pointer, std::make_index_sequence<length>()) {}
+		constexpr array(const T* const pointer) : array(pointer, make_index_sequence<length>()) {}
 
 		// Parameter pack Constructor. ( e.g. array { 'A', 'B' }; )
 		template <class TypeFirst, class... TypesRest> // Because TypesRest can be expressed as 0 params.

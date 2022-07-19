@@ -4,6 +4,7 @@
 #include "../../Array.hpp"
 #include "../Types.hpp"
 #include "Palette.hpp"
+//#include <array>
 
 namespace mst::winapi::console::frame {
 
