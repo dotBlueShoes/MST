@@ -12,7 +12,7 @@
 
 namespace mst::winapi::registry {
 
-	using characters_n::operator""_nt;
+	//using characters_n::operator""_nt;
 
 	// Generally, data consisting of more than one or two kilobytes (K) should be stored as a 
 	//  file and referred to by using a key in the registry rather than being stored as a value. 

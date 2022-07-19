@@ -9,9 +9,9 @@
 
 #include "../WinAPI.hpp"
 #include "../NArray.hpp"
-#include "../CharacterTypes.hpp"
 #include "../String.hpp"
 #include "../Thread.hpp"
+#include "Console/Palette.hpp"
 
 #undef rename
 #include <iostream>
@@ -66,18 +66,13 @@
 */
 
 namespace mst::winapi::console {
-
-	using namespace mst::characters_n;
+	
+	//using namespace mst::characters_n;
 	using namespace mst::thread_n;
 	using namespace mst::string_n;
 	using namespace mst::nArray_n;
 	using namespace mst::array_n;
-	//using namespace mst::vector_n;
-
-	using bufforType = winapi::wchar;
-	using buffor = bufforType*;
-
-	struct color { decimal<bufforType> red, green, blue; };
+	using namespace palette;
 
 	// Have in mind that winapi here uses nullTermination therefore we use it too.
 	struct font {

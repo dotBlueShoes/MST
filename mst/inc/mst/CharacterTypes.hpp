@@ -2,24 +2,25 @@
 
 #include "BasicTypes.hpp"
 #include <initializer_list>
-#include "WinAPI/Types.hpp"
+//#include "WinAPI/Types.hpp"
 
-namespace mst {
-	namespace characters_n {
-		// I need a way of getting digits in both decimal and heximal form
-		//  as an character.
-		// Not Getting but a structure that will allow me to increamenet and decrement them.
+namespace mst::characters_n {
+	
+	// I need a way of getting digits in both decimal and heximal form
+	//  as an character.
+	// Not Getting but a structure that will allow me to increamenet and decrement them.
 
-		// Whenever i will need a new digit i will need another char to represent that number.
-		//  For decimal - past 9
-		//  For hex		- past F
+	// Whenever i will need a new digit i will need another char to represent that number.
+	//  For decimal - past 9
+	//  For hex		- past F
 
 		// Not for constants tho.
 		template<typename T>
-		struct decimal {
+		class decimal {
+		public:
 			T* characters = nullptr;
 			size length = 0;
-
+	
 			decimal(const std::initializer_list<T> list) {
 				characters = new T[list.size()];
 
@@ -232,53 +233,48 @@ namespace mst {
 			}
 		};
 
-		// Known Termination. Use only if you know the length.
-		constexpr const mst::winapi::wchar* operator "" _nt(const wchar_t* string, const size length) { 
-			return string; 
-		};
-
-		//constexpr std::wstring operator ""_nt(const mst::winapi::wchar * string, size length) {
-		//	return std::wstring(string);
-		//};
-
-		//constexpr const std::string operator ""_nt(const char* string, size length) {
-		//	return std::string(string);
-		//};
-
-		//const char[] operator ""_nt(const char* string, size length) {
-		//	char* sample = "wonet return me";
-		//	return sample;
-		//};
-
-		
-		//template <char...> 
-		//char* operator "" _nt();
-
-		//constexpr const std::string operator ""_nt(const char(&notAPointer)[length]) {
-		//	return std::string(string);
-		//};
-		
-
-
-		//array& operator ""_nt(const winapi::wchar * string, size length) { return winapi::wchar(&string); };
-		//const T(&valuePointer)[length]
-		//winapi::wchar[7] operator ""_nt(const winapi::wchar * string, size length) { return string; };
-		//void operator ""_test(unsigned long long x) { std::cout << x; } // working
-
-		// ERROR / Prob. - String termination. ( I don't want all string's to be not null terminated. )
-		// Maybe these might help next time.
-		//  generally the thing is:
-		//   I was trying to use literals to solve the issue of terminated strings eg. "Troghol" - being 8 characters long due to termination
-		//  This might be solvable it's just complicated due to CPP not friendly syntax.
-		//  The issue i run at last was the fact that this constructor
-		//  "constexpr const array(const T* reference) : array(reference, std::make_index_sequence<length>()) {}"
-		//  is being called for both "_nt" and "initializer list" parameters.
-		//   Still it came a long path... 
-		//  Maybe it is actually possible to return index_sequance instead
-		//  Maybe i can somehow diffrensiate initializer list from single "_nt"
-		//  AND MAYBE BECAUSE I DON"T KNOW the "_nt" constructor works as it is written right now...
-		// https://www.google.com/search?q=Check+if+parameter+pack+is+the+same+type&sxsrf=APq-WBsm_IlVk2sZs6uYt3LN_29aSOX3BA%3A1648989813206&source=hp&ei=dZZJYrTbCs6RlwSn1bjoCw&iflsig=AHkkrS4AAAAAYkmkheWfRby88MP2Op6ArzfYGyXB6AWw&ved=0ahUKEwj06bXg9ff2AhXOyIUKHacqDr0Q4dUDCAc&uact=5&oq=Check+if+parameter+pack+is+the+same+type&gs_lcp=Cgdnd3Mtd2l6EAMyBQghEKABMgUIIRCgAVCUBFiUBGDZCmgBcAB4AIAByQGIAckBkgEDMi0xmAEAoAECoAEBsAEA&sclient=gws-wiz
-		// https://www.google.com/search?q=return+initializer+list+c%2B%2B&biw=1885&bih=954&sxsrf=APq-WBsMIEno_19_j32NtU_vML_juzC5rw%3A1648990350021&ei=jphJYsl158iuBNShgpgH&oq=return+initializer+list&gs_lcp=Cgdnd3Mtd2l6EAMYATIGCAAQBxAeMgUIABCABDIECAAQHjIECAAQHjIICAAQBxAFEB4yCAgAEAcQBRAeMgYIABAIEB46BwgAEEcQsAM6BwgAELADEEM6BAgAEA06CAgAEAcQChAeOggIABAIEAcQHkoECEEYAEoECEYYAFCxEFjpGmC7N2gBcAF4AIABngGIAcIHkgEDMC43mAEAoAEByAEJwAEB&sclient=gws-wiz
-
-	}
+	//// Not Terminated. Use only if you know the length.
+	//constexpr const mst::winapi::wchar* operator "" _nt(const wchar_t* string, const size length) { 
+	//	return string; 
+	//};
+	//
+	////constexpr std::wstring operator ""_nt(const mst::winapi::wchar * string, size length) {
+	////	return std::wstring(string);
+	////};
+	//
+	////constexpr const std::string operator ""_nt(const char* string, size length) {
+	////	return std::string(string);
+	////};
+	//
+	////const char[] operator ""_nt(const char* string, size length) {
+	////	char* sample = "wonet return me";
+	////	return sample;
+	////};
+	//
+	////template <char...> 
+	////char* operator "" _nt();
+	//
+	////constexpr const std::string operator ""_nt(const char(&notAPointer)[length]) {
+	////	return std::string(string);
+	////};
+	//
+	////array& operator ""_nt(const winapi::wchar * string, size length) { return winapi::wchar(&string); };
+	////const T(&valuePointer)[length]
+	////winapi::wchar[7] operator ""_nt(const winapi::wchar * string, size length) { return string; };
+	////void operator ""_test(unsigned long long x) { std::cout << x; } // working
+	//
+	//// ERROR / Prob. - String termination. ( I don't want all string's to be not null terminated. )
+	//// Maybe these might help next time.
+	////  generally the thing is:
+	////   I was trying to use literals to solve the issue of terminated strings eg. "Troghol" - being 8 characters long due to termination
+	////  This might be solvable it's just complicated due to CPP not friendly syntax.
+	////  The issue i run at last was the fact that this constructor
+	////  "constexpr const array(const T* reference) : array(reference, std::make_index_sequence<length>()) {}"
+	////  is being called for both "_nt" and "initializer list" parameters.
+	////   Still it came a long path... 
+	////  Maybe it is actually possible to return index_sequance instead
+	////  Maybe i can somehow diffrensiate initializer list from single "_nt"
+	////  AND MAYBE BECAUSE I DON"T KNOW the "_nt" constructor works as it is written right now...
+	//// https://www.google.com/search?q=Check+if+parameter+pack+is+the+same+type&sxsrf=APq-WBsm_IlVk2sZs6uYt3LN_29aSOX3BA%3A1648989813206&source=hp&ei=dZZJYrTbCs6RlwSn1bjoCw&iflsig=AHkkrS4AAAAAYkmkheWfRby88MP2Op6ArzfYGyXB6AWw&ved=0ahUKEwj06bXg9ff2AhXOyIUKHacqDr0Q4dUDCAc&uact=5&oq=Check+if+parameter+pack+is+the+same+type&gs_lcp=Cgdnd3Mtd2l6EAMyBQghEKABMgUIIRCgAVCUBFiUBGDZCmgBcAB4AIAByQGIAckBkgEDMi0xmAEAoAECoAEBsAEA&sclient=gws-wiz
+	//// https://www.google.com/search?q=return+initializer+list+c%2B%2B&biw=1885&bih=954&sxsrf=APq-WBsMIEno_19_j32NtU_vML_juzC5rw%3A1648990350021&ei=jphJYsl158iuBNShgpgH&oq=return+initializer+list&gs_lcp=Cgdnd3Mtd2l6EAMYATIGCAAQBxAeMgUIABCABDIECAAQHjIECAAQHjIICAAQBxAFEB4yCAgAEAcQBRAeMgYIABAIEB46BwgAEEcQsAM6BwgAELADEEM6BAgAEA06CAgAEAcQChAeOggIABAIEAcQHkoECEEYAEoECEYYAFCxEFjpGmC7N2gBcAF4AIABngGIAcIHkgEDMC43mAEAoAEByAEJwAEB&sclient=gws-wiz
 }

@@ -1,9 +1,12 @@
 #pragma once
 
 #include "../Console.hpp"
+#include "Palette.hpp"
 #include "Frame.hpp"
 
 namespace mst::winapi::console::draw {
+	
+	using namespace palette;
 
 	namespace color {
 		const console::color
@@ -12,15 +15,15 @@ namespace mst::winapi::console::draw {
 			red { { L'2', L'5', L'6', L';' }, { L'0', L';' }, { L'0', L'm' } };
 	}
 
-	block Fullfil(wchar* buffer, const wchar& character) {
+	block Fullfil(brush* buffer, const brush& nBrush) {
 		for (size i = 0; i < winapi::console::frame::window::bufforLength; ++i)
-			buffer[i] = character;
+			buffer[i].character = nBrush.character;
 	}
 	
 
 	constexpr block Rectangle(
-		wchar* buffer,
-		const wchar& character,
+		brush* buffer,
+		const brush& nBrush,
 		const uint64& posX, 
 		const uint64& posY, 
 		const uint64& width, 
@@ -36,8 +39,8 @@ namespace mst::winapi::console::draw {
 		// 241.
 
 		for (size i = posX; i < posX + width; ++i)
-			for (size j = posY * winapi::console::frame::window::x; j < ((posY + height) * winapi::console::frame::window::x); j += winapi::console::frame::window::x)
-				buffer[i + j] = character;
+			for ( size j = posY * winapi::console::frame::window::x; j < ((posY + height) * winapi::console::frame::window::x); j += winapi::console::frame::window::x )
+				buffer[i + j].character = nBrush.character;
 
 	}
 
@@ -69,20 +72,20 @@ namespace mst::winapi::console::draw {
 		
 		// This is where i apply colors for testing!
 
-		coc::command setTextColorR { coc::construct::SetTextColor(color::red) };
-		coc::command setTextColorG { coc::construct::SetTextColor(color::green) };
+		//coc::command setTextColorR ( coc::construct::SetTextColor ( color::red ) );
+		//coc::command setTextColorG { coc::construct::SetTextColor(color::green) };
 
-		const size length(frames[0].Length() / 2);
-		coc::command text1(length);
+		const size length ( frames[0].Length() );
+		coc::command text1 ( length );
 
 		for (size i = 0; i < length; ++i)
-			text1.SetCurrentElement(frames[0].Pointer()[i]);
+			text1.SetCurrentElement(frames[0].Pointer()[i].character);
 
-		coc::command text2(length);
-		for (size i = length; i < 2 * length; ++i)
-			text2.SetCurrentElement(frames[0].Pointer()[i]);
+		//coc::command text2(length);
+		//for (size i = length; i < 2 * length; ++i)
+		//	text2.SetCurrentElement(frames[0].Pointer()[i]);
 
-		coc::command output { &setTextColorR, &text1, &setTextColorG, &text2 };
+		coc::command output { /*&setTextColorR,*/ &text1 /*, &setTextColorG, &text2*/ };
 		console::output::command::Write(output.Pointer(), output.Length());
 	}
 
