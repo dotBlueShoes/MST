@@ -22,8 +22,8 @@ namespace mst::winapi {
 	#endif
 
 	#define stdcall		__stdcall
-	#define sal_in		_In_
-	#define sal_io		_In_opt_
+	//#define sal_in		_In_		// We have [in]
+	//#define sal_io		_In_opt_	// We have [out]
 
 	using handleInstnace	= HINSTANCE;
 	using moduleInstance	= HMODULE;

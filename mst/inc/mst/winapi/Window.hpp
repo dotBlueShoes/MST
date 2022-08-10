@@ -107,7 +107,7 @@ namespace mst::winapi::window {
 	}
 
 	uint16 Register(
-		const handleInstnace& windowInstance,
+		const handleInstnace& process,
 		const wchar* windowClassName,
 		const windowProcedure& procedure,
 		const resourceType& iconId,
@@ -115,23 +115,21 @@ namespace mst::winapi::window {
 		const resourceType& menuId,
 		const brushHandle& backgroundBrush
 	) {
-		windowClass windowProperties;
-		windowProperties.cbSize = { sizeof(windowClass) };
-
 		const iconHandle
-			icon		{ LoadIcon(windowInstance, MAKEINTRESOURCE(iconId)) },
-			iconSmall	{ LoadIcon(windowInstance, MAKEINTRESOURCE(iconSmallId)) };
+			icon		{ LoadIcon(process, MAKEINTRESOURCE(iconId)) },
+			iconSmall	{ LoadIcon(process, MAKEINTRESOURCE(iconSmallId)) };
 
 		const wchar*		menu			{ MAKEINTRESOURCEW(menuId) };
-		//const brushHandle	backgroundColor { CreateSolidBrush(RGB(29, 29, 29)) };  //(brushHandle)(COLOR_WINDOW + 1)
 		const cursorHandle	cursor			{ LoadCursor(nullptr, IDC_ARROW) };
-		const uint32				windowStyle		{ CS_HREDRAW | CS_VREDRAW };
-
+		const uint32		windowStyle		{ CS_HREDRAW | CS_VREDRAW };
+		
+		windowClass windowProperties;
+		windowProperties.cbSize 		= ( sizeof(windowClass) );
 		windowProperties.style			= windowStyle;
 		windowProperties.lpfnWndProc	= procedure;
 		windowProperties.cbClsExtra		= 0;
 		windowProperties.cbWndExtra		= 0;
-		windowProperties.hInstance		= windowInstance;
+		windowProperties.hInstance		= process;
 		windowProperties.hIcon			= icon;
 		windowProperties.hCursor		= cursor;
 		windowProperties.hbrBackground	= backgroundBrush;
@@ -142,14 +140,14 @@ namespace mst::winapi::window {
 		return RegisterClassExW(&windowProperties);
 	}
 
-	int64 Initialize(
-		const handleInstnace& windowInstance,
+	windowHandle Initialize(
+		const handleInstnace& process,
 		const wchar* windowClassName,
 		const wchar* windowTitle,
-		const int32& nCmdShow
+		const int32& windowState
 	) {
 		//WCHAR windowTitle[100];
-		//LoadStringW(windowInstance, 103, windowTitle, 100);
+		//LoadStringW(process, 103, windowTitle, 100);
 		
 		windowHandle window = CreateWindowExW(
 			WS_EX_APPWINDOW,
@@ -160,11 +158,11 @@ namespace mst::winapi::window {
 			CW_USEDEFAULT, 0,
 			nullptr,
 			nullptr,
-			windowInstance,
+			process,
 			nullptr
 		);
 
-		if (!window) return 1;
+		if (!window) return nullptr;
 
 		// Setup information needed for controlling the mode of the window. 
 		GetWindowPlacement(window, &windowMode::windowedPlacement);
@@ -176,10 +174,10 @@ namespace mst::winapi::window {
 		//windowMode::WindowedBorderless(window);
 		//SetMenu(window, nullptr);
 
-		ShowWindow(window, nCmdShow);
+		ShowWindow(window, windowState);
 		UpdateWindow(window);
 
-		return 0;
+		return window;
 	}
 
 }

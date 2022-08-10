@@ -10,8 +10,8 @@ namespace mst::winapi::window::theme {
 			backgroundSelected,
 			backgroundHovered,
 			backgroundPrimary,
-			borderColor;
-		const color textPrimary;
+			borderColor,
+			textPrimary;
 
 		theme(
 			const color newBackgroundSecondary,

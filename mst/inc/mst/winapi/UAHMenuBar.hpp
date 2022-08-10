@@ -36,7 +36,7 @@ namespace mst::winapi::window::event::uahmenubar {
 	//  WM_NCPAINT
 	//  WM_NCACTIVATE
 
-	enum class UAHMenuEvent : uint32 {
+	enum class Event : uint32 {
 		MeasureItem = WM_UAHMEASUREMENUITEM,
 		PaintPopup = WM_UAHNCPAINTMENUPOPUP,
 		DrawItem = WM_UAHDRAWMENUITEM,
