@@ -99,12 +99,12 @@ namespace mst {
 		}
 
 		namespace accelerator {
-			inline auto Load(handleInstnace& instance, wchar* identifier) { return LoadAcceleratorsW(instance, identifier); }
+			inline auto Load(handleInstance& instance, wchar* identifier) { return LoadAcceleratorsW(instance, identifier); }
 			inline auto Translate(windowHandle& window, keysMapHandle& keys, retrivedMessage& retrived) { return TranslateAccelerator(window, keys, &retrived); }
 		}
 
 		namespace wideString {
-			inline auto Load(const handleInstnace& instance, const resourceType& resourceId, wchar* buffor, const int32& bufforLength) {
+			inline auto Load(const handleInstance& instance, const resourceType& resourceId, wchar* buffor, const int32& bufforLength) {
 				return LoadStringW(instance, resourceId, buffor, bufforLength); }
 		}
 

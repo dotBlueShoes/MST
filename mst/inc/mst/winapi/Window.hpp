@@ -107,7 +107,7 @@ namespace mst::winapi::window {
 	}
 
 	uint16 Register(
-		const handleInstnace& process,
+		const handleInstance& process,
 		const wchar* windowClassName,
 		const windowProcedure& procedure,
 		const resourceType& iconId,
@@ -141,7 +141,7 @@ namespace mst::winapi::window {
 	}
 
 	windowHandle Initialize(
-		const handleInstnace& process,
+		const handleInstance& process,
 		const wchar* windowClassName,
 		const wchar* windowTitle,
 		const int32& windowState

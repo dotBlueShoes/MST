@@ -25,7 +25,7 @@ namespace mst::winapi {
 	//#define sal_in		_In_		// We have [in]
 	//#define sal_io		_In_opt_	// We have [out]
 
-	using handleInstnace	= HINSTANCE;
+	using handleInstance	= HINSTANCE;
 	using moduleInstance	= HMODULE;
 	using windowProcedure	= WNDPROC;
 	using windowClass		= WNDCLASSEXW;

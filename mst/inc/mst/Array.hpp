@@ -41,17 +41,17 @@ namespace mst::array_n {
 		constexpr array(const TypeFirst& newFirstValue, const TypeFirst& newSecondValue, const TypesRest&... newRestValue) 
 			: value { newFirstValue, newSecondValue, newRestValue... } {}
 
-		// [] operator
+		/// [] Operator
 
 		getter const T& operator[](size index) const noexcept { return value[index]; }
 		getter T& operator[](size index) noexcept { return value[index]; }
 
-		// Iteration
+		/// Iteration
 
 		getter const T* begin() const noexcept { return &value[0]; }
 		getter const T* end() const noexcept { return &value[nonTemporaryLength]; }
 
-		// Getters
+		/// Getters
 
 		getter const size& Length() const noexcept { return nonTemporaryLength; }
 		getter const T* const Pointer() const noexcept { return &value[0]; }

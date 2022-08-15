@@ -45,11 +45,12 @@
 
 #include "MST/CharacterTypes.hpp"
 #include "MST/BasicTypes.hpp"
+#include "MST/Pointer.hpp"
+#include "MST/String.hpp"
+#include "MST/Thread.hpp"
 #include "MST/Vector.hpp"
 #include "MST/NArray.hpp"
 #include "MST/Array.hpp"
-#include "MST/String.hpp"
-#include "MST/Thread.hpp"
 
 //#include <array>
 //#include <type_traits>

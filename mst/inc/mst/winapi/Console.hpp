@@ -800,7 +800,7 @@ namespace mst::winapi::console {
 			#pragma GCC diagnostic push
 			#pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 			window = GetConsoleWindow();
-			winapi::handleInstnace instance { (winapi::handleInstnace)GetWindowLongW(window, -6) };
+			winapi::handleInstance instance { (winapi::handleInstnace)GetWindowLongW(window, -6) };
 			HICON hIcon = LoadIcon(instance, IDI_SHIELD);
 			if (hIcon) {
 				SendMessage(window, WM_SETICON, ICON_SMALL, (LPARAM)hIcon); // Window Icon
