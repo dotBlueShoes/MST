@@ -2,11 +2,15 @@
 
 #pragma once
 #include "../BasicTypes.hpp"
+#include "../Vector.hpp"
 #include "../Array.hpp"
+
+#define OEMRESOURCE /// For an application to use any of the OCR_ constants, the constant OEMRESOURCE must be defined
 #include <windows.h>
 
 namespace mst::winapi {
 
+	using namespace vector_n;
 	using namespace array_n;
 
 	#if WINDOWS_VERSION == _WIN32_WINNT_WIN10
@@ -32,6 +36,7 @@ namespace mst::winapi {
 
 	using objectHandle = HANDLE;
 
+	using multipleWindowHandle = HDWP;
 	using displayContextHandle = HDC;
 	using keysMapHandle = HACCEL;
 	using cursorHandle = HCURSOR;

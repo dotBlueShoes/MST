@@ -1,6 +1,5 @@
 #pragma once
 
-
 #undef rename
 #include <utility>
 #include "BasicTypes.hpp"

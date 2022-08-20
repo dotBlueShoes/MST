@@ -10,22 +10,22 @@ namespace mst::winapi::window {
 
 	enum class input : uint32 {
 
-		// "return 0" means that WM_PAINT instead handles the background color setting up.
-		// It makes passing the background color at window class initialization useless.
+		/// "return 0" means that WM_PAINT instead handles the background color setting up.
+		/// It makes passing the background color at window class initialization useless.
 		EraseBackgroundOnCalledInvalidPortion = WM_ERASEBKGND,
+		
 		ControlStaticBeforeDraw = WM_CTLCOLORSTATIC,
 		DialogWindowBeforeDraw = WM_CTLCOLORDLG,
 		InitializeDialogWindow = WM_INITDIALOG,
 		NonClientAreaFocus = WM_NCACTIVATE,
-
-		// This calls whenever we switch from dark mode to light mode and reverse.
-		SettingChange = WM_SETTINGCHANGE,
+		SettingChange = WM_SETTINGCHANGE, /// This calls whenever we switch from dark mode to light mode and reverse.
 		NonClientAreaPaint = WM_NCPAINT,
 		ThemeChange = WM_THEMECHANGED,
 		Command = WM_COMMAND,
 		Destroy = WM_DESTROY,
 		Create = WM_CREATE,
-		Paint = WM_PAINT
+		Paint = WM_PAINT,
+		Resize = WM_SIZE
 	};
 
 	namespace windowMode {
@@ -106,7 +106,7 @@ namespace mst::winapi::window {
 		}
 	}
 
-	uint16 Register(
+	const uint16 Register(
 		const handleInstance& process,
 		const wchar* windowClassName,
 		const windowProcedure& procedure,
@@ -140,22 +140,22 @@ namespace mst::winapi::window {
 		return RegisterClassExW(&windowProperties);
 	}
 
-	windowHandle Initialize(
+	const windowHandle Initialize(
 		const handleInstance& process,
 		const wchar* windowClassName,
 		const wchar* windowTitle,
-		const int32& windowState
+		const int32& windowState,
+		const vector2<uint64>& windowPosition,
+		const vector2<uint64>& windowSize
 	) {
-		//WCHAR windowTitle[100];
-		//LoadStringW(process, 103, windowTitle, 100);
 		
 		windowHandle window = CreateWindowExW(
 			WS_EX_APPWINDOW,
 			windowClassName,
 			windowTitle,
 			WS_OVERLAPPEDWINDOW,
-			CW_USEDEFAULT, 0,
-			CW_USEDEFAULT, 0,
+			windowPosition.x, windowPosition.y,
+			windowSize.x, windowSize.y,
 			nullptr,
 			nullptr,
 			process,
@@ -178,6 +178,57 @@ namespace mst::winapi::window {
 		UpdateWindow(window);
 
 		return window;
+	}
+	
+	const windowHandle CreateChildWindow(
+		const handleInstance& process,
+		const windowHandle& parentWindow,
+		const windowProcedure& procedure,
+		const cursorHandle& cursor,
+		const wchar* windowClassName,
+		const brushHandle& backgroundBrush,
+		const int32& windowState,
+		const vector2<uint64>& windowOffset,
+		const vector2<uint64>& windowSize
+	) {
+		const uint32 windowStyle ( CS_HREDRAW | CS_VREDRAW );
+		windowClass windowProperties;
+			
+		windowProperties.cbSize 		= ( sizeof(windowClass) );
+		windowProperties.style			= windowStyle;
+		windowProperties.lpfnWndProc	= procedure;
+		windowProperties.cbClsExtra		= 0;
+		windowProperties.cbWndExtra		= 0;
+		windowProperties.hInstance		= process;
+		windowProperties.hIcon			= nullptr;
+		windowProperties.hCursor		= cursor;
+		windowProperties.hbrBackground	= backgroundBrush;
+		windowProperties.lpszMenuName	= nullptr;
+		windowProperties.lpszClassName	= windowClassName;
+		windowProperties.hIconSm		= nullptr;
+		
+		RegisterClassExW(&windowProperties);
+		
+		{
+			const windowHandle childWindow = CreateWindowExW(
+				0, 
+				windowClassName, 
+				nullptr, 
+				WS_CHILD, 
+				windowOffset.x, 
+				windowOffset.y, 
+				windowSize.x, 
+				windowSize.y, 
+				parentWindow, 
+				nullptr, 
+				process, 
+				nullptr
+			);
+			
+			ShowWindow(childWindow, windowState);
+			UpdateWindow(childWindow);
+			return childWindow;
+		}
 	}
 
 }
