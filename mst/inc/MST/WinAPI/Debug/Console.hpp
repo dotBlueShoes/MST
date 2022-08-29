@@ -11,7 +11,19 @@ namespace mst::winapi::debug::console {
 	
 	#ifdef DEBUG
 	
-	void RedirectIOToConsole() {
+	// Redirecting IO to console
+	// https://cplusplus.com/forum/windows/58206/
+	
+	// Customize DEBUG info
+	// https://www.codeproject.com/Articles/3135812/Creating-a-Console-based-window-for-debugging
+	
+	// To (get exsisting)/create WindowsTerminal TAB as DEBUG console
+	// https://stackoverflow.com/questions/4089050/how-to-use-win32-api-to-get-handle-of-a-process-for-an-application-in-windows
+	// https://duckduckgo.com/?q=powershell+retrive+console+handle&t=vivaldi&ia=web
+	// https://docs.microsoft.com/en-us/troubleshoot/windows-server/performance/obtain-console-window-handle
+	// https://stackoverflow.com/questions/25369285/how-can-i-get-all-window-handles-by-a-process-in-powershell
+	
+	void RedirectIO() {
 		
 		using namespace std;
 		
