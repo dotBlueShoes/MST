@@ -17,6 +17,7 @@ namespace mst::winapi::window {
 		ControlStaticBeforeDraw = WM_CTLCOLORSTATIC,
 		DialogWindowBeforeDraw = WM_CTLCOLORDLG,
 		InitializeDialogWindow = WM_INITDIALOG,
+		OnMouseLeftClickDown = WM_LBUTTONDOWN,
 		NonClientAreaFocus = WM_NCACTIVATE,
 		SettingChange = WM_SETTINGCHANGE, /// This calls whenever we switch from dark mode to light mode and reverse.
 		NonClientAreaPaint = WM_NCPAINT,
@@ -24,6 +25,7 @@ namespace mst::winapi::window {
 		Command = WM_COMMAND,
 		Destroy = WM_DESTROY,
 		Create = WM_CREATE,
+		OnMove = WM_MOVING,
 		Paint = WM_PAINT,
 		Resize = WM_SIZE
 	};
