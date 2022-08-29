@@ -1,8 +1,9 @@
 #pragma once
 #include "BasicTypes.hpp"
 
-namespace mst::vector_n {
 
+namespace mst {
+	
 	/// FORWARD DECLARATION
 	template <class T>
 	struct vector3;
@@ -15,7 +16,7 @@ namespace mst::vector_n {
 		constexpr vector2(const vector3<T>& other) : x(other.x), y(other.y) {}
 		constexpr vector2(const vector2& other) : x(other.x), y(other.y) {}
 	};
-	
+
 	template <class T>
 	struct vector3 {
 		T x, y, z;
@@ -25,9 +26,9 @@ namespace mst::vector_n {
 		constexpr vector3(const vector2<T>& other) : x(other.x), y(other.y), z(0) {}
 	};
 	
-	// template <class T>
-	// struct rect {
-	// 	T a, b, c, d;
-	// }
-
 }
+
+// template <class T>
+// struct rect {
+// 	T a, b, c, d;
+// }

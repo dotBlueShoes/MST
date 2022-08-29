@@ -10,7 +10,6 @@
 
 namespace mst::winapi {
 
-	using namespace vector_n;
 	using namespace array_n;
 
 	#if WINDOWS_VERSION == _WIN32_WINNT_WIN10

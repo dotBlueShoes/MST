@@ -9,6 +9,8 @@
 #include "CharacterTypes.hpp"
 #include "Array.hpp"
 
+#include "WinAPI/Debug/Console.hpp"
+
 using namespace mst::array_n;
 
 #undef SetConsoleTitle

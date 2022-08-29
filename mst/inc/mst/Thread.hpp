@@ -7,6 +7,4 @@
 #undef rename
 #define rename __forceinline
 
-namespace mst::thread_n {
-	using thread = std::thread;
-}
+using thread = std::thread;

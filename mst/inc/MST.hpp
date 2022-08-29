@@ -43,6 +43,7 @@
 
 #include <stdint.h>
 
+#include "MST/Debug/Debug.hpp"
 #include "MST/CharacterTypes.hpp"
 #include "MST/BasicTypes.hpp"
 #include "MST/Pointer.hpp"
@@ -51,6 +52,7 @@
 #include "MST/Vector.hpp"
 #include "MST/NArray.hpp"
 #include "MST/Array.hpp"
+
 
 //#include <array>
 //#include <type_traits>
