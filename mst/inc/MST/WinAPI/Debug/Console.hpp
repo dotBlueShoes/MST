@@ -11,8 +11,18 @@ namespace mst::winapi::debug::console {
 	
 	#ifdef DEBUG
 	
+	enum class LogLevel : int64 {
+        Min = -1,		// Messages that must be displayed 
+        Normal = 0,		// Messages that would normally be displayed
+        Verbose = 1,	// Messages that don't necessarily need to be displayed
+		Max = 2			// Everything
+    };
+	
 	// Redirecting IO to console
 	// https://cplusplus.com/forum/windows/58206/
+	// https://stackoverflow.com/questions/13074435/getting-line-input-from-a-allocconsole-c
+	// https://www.educative.io/answers/what-is-freopens-in-c
+	// https://stackoom.com/en/question/1Ma8k
 	
 	// Customize DEBUG info
 	// https://www.codeproject.com/Articles/3135812/Creating-a-Console-based-window-for-debugging
@@ -23,57 +33,36 @@ namespace mst::winapi::debug::console {
 	// https://docs.microsoft.com/en-us/troubleshoot/windows-server/performance/obtain-console-window-handle
 	// https://stackoverflow.com/questions/25369285/how-can-i-get-all-window-handles-by-a-process-in-powershell
 	
+	FILE* stream;
+	
 	void RedirectIO() {
 		
-		using namespace std;
-		
-		// Maximum mumber of lines the output console should have
-		const WORD MAX_CONSOLE_LINES ( 500 );
-		int64 hConHandle, lStdHandle;
-		
-		CONSOLE_SCREEN_BUFFER_INFO coninfo;
-		FILE *fp;
-	
-		// Allocate a console for this app
 		AllocConsole();
+		
+		freopen_s(&stream, "conin$", "r", stdin);
+		freopen_s(&stream, "conout$", "w", stdout);
+		freopen_s(&stream, "conout$", "w", stderr);
+		
+	}
 	
-		// Set the screen buffer to be big enough to let us scroll text
-		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&coninfo);
-		coninfo.dwSize.Y = MAX_CONSOLE_LINES;
-		SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE),coninfo.dwSize);
+	void LogInfo(const LogLevel messageLogLevel, const string message) {
+		if ((LogLevel)DEBUG >= messageLogLevel)
+			std::cout << "Info: " << message << '\n';
+	}
 	
-		// Redirect unbuffered STDOUT to the console
-		lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-		hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	void LogWarning(const LogLevel messageLogLevel, const string message) {
+		if ((LogLevel)DEBUG >= messageLogLevel)
+			std::cout << "Warning: " << message << '\n';
+	}
 	
-		fp = _fdopen( hConHandle, "w" );
+	void LogError(const LogLevel messageLogLevel, const string message) {
+		if ((LogLevel)DEBUG >= messageLogLevel)
+			std::cout << "Error: " << message << '\n';
+	}
 	
-		*stdout = *fp;
-	
-		setvbuf( stdout, NULL, _IONBF, 0 );
-	
-		// Redirect unbuffered STDIN to the console
-	
-		lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
-		hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	
-		fp = _fdopen( hConHandle, "r" );
-		*stdin = *fp;
-		setvbuf( stdin, NULL, _IONBF, 0 );
-	
-		// Redirect unbuffered STDERR to the console
-		lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
-		hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	
-		fp = _fdopen( hConHandle, "w" );
-	
-		*stderr = *fp;
-	
-		setvbuf( stderr, NULL, _IONBF, 0 );
-	
-		// Make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog
-		// Point to console as well
-		ios::sync_with_stdio();
+	void ReleaseIO() {
+		fclose(stdin);
+		fclose(stdout);
 	}
 	
 	#endif
