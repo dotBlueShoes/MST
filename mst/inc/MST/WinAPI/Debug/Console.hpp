@@ -11,11 +11,12 @@ namespace mst::winapi::debug::console {
 	
 	#ifdef DEBUG
 	
-	enum class LogLevel : int64 {
-        Min = -1,		// Messages that must be displayed 
-        Normal = 0,		// Messages that would normally be displayed
-        Verbose = 1,	// Messages that don't necessarily need to be displayed
-		Max = 2			// Everything
+	enum LogLevel : int64 {
+        Min = -1,		// Messages that must be displayed.
+        None = 0,		// Treated as if DEBUG wouldn't be defined.
+		Normal = 1,		// Messages that would normally be displayed.
+        Verbose = 2,	// Messages that don't necessarily need to be displayed.
+		Max = 3			// Everything.
     };
 	
 	// Redirecting IO to console

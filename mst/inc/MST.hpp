@@ -90,6 +90,10 @@ namespace mst {
 	//	inline string::string ToString(const uint64 uintiger) { return std::to_string(uintiger); }
 	//	//inline real64 ToReal64(uint64 uintiger) { return (real64)uintiger; }
 	//}
+	
+	enum SystemVersion : uint64 {
+		Windows10 = 0,
+	};
 
 	// something
 	namespace utility_n {
