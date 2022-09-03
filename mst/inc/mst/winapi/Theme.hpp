@@ -3,36 +3,45 @@
 
 namespace mst::winapi::window::theme {
 	
-	template <class TypeFirst>
-	concept IsTypeColor = requires (const TypeFirst& valueFirst) {
-		//{value} -> std::same_as<color>;
-		//std::same_as<TypesRest, TypeFirst>;
+	template <class TypeFirst, class TypeRest>
+	concept IsTypeColor = requires (const TypeFirst& valueFirst, const TypeRest& valueRest) {
+		std::same_as<TypeFirst, TypeRest>;
 		std::same_as<color, TypeFirst>;
 	};
 	
 	template <uint64 length>
 	class palette {
 		
-		// // Forwarded Constructor. used by "Initialization list Constructor via Forwarding Constructor" constructor.
-		// template <size ... index>
-		// constexpr palette(const color* const pointer, index_sequence<index...>) : value { pointer[index]... } {}
-		
 	public:
 	
-		const array<const color&, length> colors;
+		template <class... ParameterPack>
+		using FirstType = std::tuple_element_t<0, std::tuple<ParameterPack...>>;
+	
+		const array<const color, length> colors;
 		
-		//const TypeFirst& newFirstValue, const TypeFirst& newSecondValue, const TypesRest&... newRestValue
+		const color& 
+			text 		= colors[0],
+			primar	 	= colors[1],
+			second	 	= colors[2],
+			selected 	= colors[3],
+			hovered 	= colors[4],
+			border 		= colors[5];
 		
-		
-		
-		template <class TypeFirst, class... TypesRest> requires IsTypeColor<TypeFirst>
-		constexpr palette (const TypeFirst& newFirstColor, const TypesRest&... newRestColors) // Parameter pack Constructor. ( e.g. palette { A, B }; )
+		// Parameter pack Constructor. ( e.g. palette { A, B }; )
+		template <class TypeFirst, class... TypeRest> 
+		requires IsTypeColor<TypeFirst, FirstType<TypeRest...>>
+		constexpr palette (const TypeFirst& newFirstColor, const TypeRest&... newRestColors) 
 			: colors { newFirstColor, newRestColors... } {}
 		
-		//palette (
-		//	const TypesRest&... newRestValue
-		//) : {}
-		
+	};
+	
+	const palette<6> sample { 
+		RGB(0xf0, 0xf0, 0xf0),
+		RGB(0xff, 0xff, 0xff), 
+		RGB(0xcc, 0xe8, 0xff), 
+		RGB(0xe5, 0xf3, 0xff), 
+		RGB(0xff, 0xff, 0xff), 
+		RGB(0x00, 0x00, 0x20)
 	};
 
 	struct theme {
@@ -72,6 +81,7 @@ namespace mst::winapi::window::theme {
 	class solidBrush {
 		brushHandle handle;
 	public:
+	
 		// Requires Destroy() to be called explicitly. Any recall of this function before destruction will result in memory leak.
 		void Create(const color& brushColor) { handle = CreateSolidBrush(brushColor); }
 
@@ -79,7 +89,9 @@ namespace mst::winapi::window::theme {
 		//void Replace(const color& brushColor) { *handle = *(CreateSolidBrush(brushColor)); } 
 
 		block Destroy() { DeleteObject(handle); }
+		
 		getter const brushHandle& Get() const noexcept { return handle; }
+		
 	};
 
 	//class palette {
