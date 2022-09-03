@@ -2,6 +2,38 @@
 #include "DarkMode.hpp"
 
 namespace mst::winapi::window::theme {
+	
+	template <class TypeFirst>
+	concept IsTypeColor = requires (const TypeFirst& valueFirst) {
+		//{value} -> std::same_as<color>;
+		//std::same_as<TypesRest, TypeFirst>;
+		std::same_as<color, TypeFirst>;
+	};
+	
+	template <uint64 length>
+	class palette {
+		
+		// // Forwarded Constructor. used by "Initialization list Constructor via Forwarding Constructor" constructor.
+		// template <size ... index>
+		// constexpr palette(const color* const pointer, index_sequence<index...>) : value { pointer[index]... } {}
+		
+	public:
+	
+		const array<const color&, length> colors;
+		
+		//const TypeFirst& newFirstValue, const TypeFirst& newSecondValue, const TypesRest&... newRestValue
+		
+		
+		
+		template <class TypeFirst, class... TypesRest> requires IsTypeColor<TypeFirst>
+		constexpr palette (const TypeFirst& newFirstColor, const TypesRest&... newRestColors) // Parameter pack Constructor. ( e.g. palette { A, B }; )
+			: colors { newFirstColor, newRestColors... } {}
+		
+		//palette (
+		//	const TypesRest&... newRestValue
+		//) : {}
+		
+	};
 
 	struct theme {
 

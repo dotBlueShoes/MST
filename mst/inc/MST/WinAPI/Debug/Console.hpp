@@ -33,7 +33,7 @@ namespace mst::winapi::debug::console {
 	// https://docs.microsoft.com/en-us/troubleshoot/windows-server/performance/obtain-console-window-handle
 	// https://stackoverflow.com/questions/25369285/how-can-i-get-all-window-handles-by-a-process-in-powershell
 	
-	FILE* stream;
+	FILE* stream; // NOT RLY SURE HOW IT WORKS.
 	
 	void RedirectIO() {
 		
