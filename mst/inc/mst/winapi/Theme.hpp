@@ -3,13 +3,12 @@
 
 namespace mst::winapi::window::theme {
 	
-	template <class TypeFirst, class TypeRest>
-	concept IsTypeColor = requires (const TypeFirst& valueFirst, const TypeRest& valueRest) {
-		std::same_as<TypeFirst, TypeRest>;
-		std::same_as<color, TypeFirst>;
+	template <class TypeFirst, class TypeOther>
+	concept IsSameType = requires (const TypeFirst&, const TypeOther&) {
+		std::same_as<TypeFirst, TypeOther>;
 	};
 	
-	template <uint64 length>
+	template <uint64 length = 6>
 	class palette {
 		
 	public:
@@ -28,10 +27,10 @@ namespace mst::winapi::window::theme {
 			border 		= colors[5];
 		
 		// Parameter pack Constructor. ( e.g. palette { A, B }; )
-		template <class TypeFirst, class... TypeRest> 
-		requires IsTypeColor<TypeFirst, FirstType<TypeRest...>>
-		constexpr palette (const TypeFirst& newFirstColor, const TypeRest&... newRestColors) 
-			: colors { newFirstColor, newRestColors... } {}
+		template <class... TypeRest> 
+		requires IsSameType<color, FirstType<TypeRest...>>
+		constexpr palette (const color& newFirstColor, const color& newSecondColor, const TypeRest&... newRestColors) 
+			: colors { newFirstColor, newSecondColor, newRestColors... } {}
 		
 	};
 	
