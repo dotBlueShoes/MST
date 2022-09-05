@@ -63,6 +63,8 @@ namespace mst::nArray_n {
 
 			// UNSAFE
 			constexpr nArray(const size& nSize) { value = new T[nSize]; }
+			block SetLengthZero() { length = 0; } 
+			
 			block SetCurrentElement(const T& nValue)	{ value[length] = nValue; ++length; }
 			block SetElement(const T& value, const size& index)	{ value[index] = value; }
 

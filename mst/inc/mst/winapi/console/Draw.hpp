@@ -14,11 +14,13 @@ namespace mst::winapi::console::draw {
 			blue { { L'0', L';' }, { L'0', L';' }, { L'2', L'5', L'6', L'm' } },
 			red { { L'2', L'5', L'6', L';' }, { L'0', L';' }, { L'0', L'm' } };
 	}
+	
+	//2 console::output::command::command output ( winapi::console::frame::window::maxBufforLength );
 
 	block Fullfil(brush* buffer, const brush& nBrush) {
 		for (size i = 0; i < winapi::console::frame::window::bufforLength; ++i) {
 			buffer[i].character = nBrush.character;
-			buffer[i].characterColor = nBrush.characterColor;
+			buffer[i].textColor = nBrush.textColor;
 			buffer[i].backgroundColor = nBrush.backgroundColor;
 		}
 	}
@@ -44,7 +46,7 @@ namespace mst::winapi::console::draw {
 		for (size i = posX; i < posX + width; ++i)
 			for ( size j = posY * winapi::console::frame::window::x; j < ((posY + height) * winapi::console::frame::window::x); j += winapi::console::frame::window::x ) {
 				buffer[i + j].character = nBrush.character;
-				buffer[i + j].characterColor = nBrush.characterColor;
+				buffer[i + j].textColor = nBrush.textColor;
 				buffer[i + j].backgroundColor = nBrush.backgroundColor;
 			}
 
@@ -52,6 +54,7 @@ namespace mst::winapi::console::draw {
 
 	block RedrawScreen(const frame::window::frameCharacterBuffor& frame) {
 		namespace coc = console::output::command;
+		namespace coccu = coc::construct::unsafe;
 		// This sample code gives us information of:
 		//  1. We cannot refer to frame size when counting virtual terminal functionality e.g. color changing.
 		//  2. This sample does not show how frames 1, 2, 3 would be copied and drawed. only how a sinlge frame can be drawed.
@@ -76,23 +79,48 @@ namespace mst::winapi::console::draw {
 		//  - https://en.cppreference.com/w/cpp/chrono/steady_clock/now
 		//  - https://en.cppreference.com/w/cpp/chrono/duration
 		
-		// This is where i apply colors for testing!
-
-		coc::command setTextColor ( coc::construct::SetTextColor ( frame[0].backgroundColor ) );
-		//coc::command setTextColorG { coc::construct::SetTextColor(color::green) };
-
+		//coc::command setTextColor // Storing the Text Color Command
+		//	( coc::construct::SetTextColor ( frame[0].textColor ) );
+		//coc::command setTextBackgroundColor // Storing the Background Color Command
+		//	( coc::construct::SetTextBackgroundColor ( frame[0].backgroundColor ) );
+		
+		// Here we're setting up the character buffor. other are untoched.. not implemented..
 		const size length ( frame.Length() );
-		coc::command text1 ( length );
-
+		
+		coc::command text ( length );
+		
 		for (size i = 0; i < length; ++i)
-			text1.SetCurrentElement(frame.Pointer()[i].character);
-
-		//coc::command text2(length);
-		//for (size i = length; i < 2 * length; ++i)
-		//	text2.SetCurrentElement(frames[0].Pointer()[i]);
-
-		coc::command output { &setTextColor, &text1 /*, &setTextColorG, &text2*/ };
+			text.SetCurrentElement(frame.Pointer()[i].character);
+		
+		coc::command output { /*&setTextBackgroundColor, &setTextColor,*/ &text };
 		console::output::command::Write(output.Pointer(), output.Length());
+		
+		//2 // colors redo
+		//2 {
+		//2 	const size frameLength ( frame.Length() );
+		//2 	size length ( frameLength ); // equal to number of characters initially.
+		//2 	
+		//2 	
+		//2 	/// Theres prob. with memory leaks/reads
+		//2 	/// This like certainly does not fix that.
+		//2 	/// It also does not fix the frame drop...
+		//2 	output.SetLengthZero(); // Clear the indicator. 
+		//2 	
+		//2 	for (size i = 0; i < frameLength; ++i) {
+		//2 		length += coccu::SetTextBackgroundColorLength(frame.Pointer()[i].backgroundColor); // adding space for color commands
+		//2 		length += coccu::SetTextColorLength(frame.Pointer()[i].textColor); // adding space for color commands
+		//2 	}
+		//2 	
+		//2 	{
+		//2 		for (size i = 0; i < frameLength; ++i) {
+		//2 			coccu::SetTextBackgroundColor(output, frame.Pointer()[i].backgroundColor);
+		//2 			coccu::SetTextColor(output, frame.Pointer()[i].textColor);
+		//2 			output.SetCurrentElement(frame.Pointer()[i].character);
+		//2 		}
+		//2 		
+		//2 		console::output::command::Write(output.Pointer(), length);
+		//2 	}
+		//2 }
 	}
 
 	block MainLoop(const frame::window::frameCharacterBuffor& frame) {
@@ -104,7 +132,7 @@ namespace mst::winapi::console::draw {
 		// Theres an ERROR with an I and bell sound appearing !
 		//  also double square sign was seen.
 		// I ALSO SHOUD HAVE LOGIC TO PUT THE BUFFOR THATS INSIDE Uint64ToWchars HERE!
-		array<winapi::wchar, 10> buffor;
+		array<winapi::wchar, 12> buffor;
 
 		while (frame::isRunning) {
 			RedrawScreen(frame);

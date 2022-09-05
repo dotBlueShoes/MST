@@ -12,7 +12,10 @@ namespace mst::winapi::console::frame {
 	using namespace palette;
 
 	namespace window {
-		const int16 x(140), y(24), bufforLength((x * y));
+		const int16 x(140), y(24), 
+			bufforLength((x * y));
+			
+		const size maxBufforLength((14 + 14 + 1) * bufforLength);
 
 		// Frames consist of symbol that is being displayed and
 		//  effect that is being set via command. Because the 

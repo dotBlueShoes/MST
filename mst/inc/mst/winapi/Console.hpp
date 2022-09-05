@@ -67,9 +67,6 @@
 
 namespace mst::winapi::console {
 	
-	//using namespace mst::characters_n;
-	using namespace mst::thread_n;
-	using namespace mst::string_n;
 	using namespace mst::nArray_n;
 	using namespace mst::array_n;
 	using namespace palette;
@@ -225,6 +222,7 @@ namespace mst::winapi::console {
 
 					for (size i = 0; i < titleLength; ++i)
 						temp[4 + i] = title[i];
+						// temp[4 + i] = L'a'; // SEE FOR ADDITIONAL LETTER !!
 
 					temp[length - 1] = L'\x07';
 
@@ -273,11 +271,17 @@ namespace mst::winapi::console {
 				}
 
 				retriver command SetTextBackgroundColor(
-					const decimal<bufforType>& red,
-					const decimal<bufforType>& green,
-					const decimal<bufforType>& blue
+					const color& backgroundColor
+					//const decimal<bufforType>& red,
+					//const decimal<bufforType>& green,
+					//const decimal<bufforType>& blue
 				) {
-					const size length { 7 + red.length + green.length + blue.length };
+					const size length { 
+						7 + backgroundColor.red.length +
+						backgroundColor.green.length + 
+						backgroundColor.blue.length 
+					};
+					
 					buffor temp { new bufforType[length] };
 
 					// As to why the length
@@ -297,16 +301,16 @@ namespace mst::winapi::console {
 					temp[6] = L';';
 
 					// RED
-					for (size i = 0; i < red.length; ++i)
-						temp[7 + i] = red.characters[i];
+					for (size i = 0; i < backgroundColor.red.length; ++i)
+						temp[7 + i] = backgroundColor.red.characters[i];
 
 					// GREEN
-					for (size i = 0; i < green.length; ++i)
-						temp[7 + red.length + i] = green.characters[i];
+					for (size i = 0; i < backgroundColor.green.length; ++i)
+						temp[7 + backgroundColor.red.length + i] = backgroundColor.green.characters[i];
 
 					// BLUE
-					for (size i = 0; i < blue.length; ++i)
-						temp[7 + red.length + green.length + i] = blue.characters[i];
+					for (size i = 0; i < backgroundColor.blue.length; ++i)
+						temp[7 + backgroundColor.red.length + backgroundColor.green.length + i] = backgroundColor.blue.characters[i];
 
 					return { temp, length }; // SUCCESS
 				}
@@ -482,66 +486,71 @@ namespace mst::winapi::console {
 				}
 
 				int64 DisplayTextBackgroundColors_FlamePattern() {
-					decimal<winapi::wchar> red { L'0', L';' }, green { L'0', L';' }, blue { L'0', L'm' };
+					
+					console::color myColor { { L'0', L';' }, { L'0', L';' }, { L'0', L'm' } };
+					//decimal<winapi::wchar> red { L'0', L';' }, green { L'0', L';' }, blue { L'0', L'm' };
+					
 					const command text1 { L' ' };
 
 					for (int64 i { 0 }; i < 256; i++) {
 
-						const command setTextColor { construct::SetTextBackgroundColor(red, green, blue) };
+						const command setTextColor { construct::SetTextBackgroundColor(myColor) };
 						const command output { &setTextColor, &text1 };
 						Write(output.Pointer(), output.Length());
 
-						++red;
+						++myColor.red;
 					}
 
 					for (int64 i { 0 }; i < 256; i++) {
 
-						const command setTextColor { construct::SetTextBackgroundColor(red, green, blue) };
+						const command setTextColor { construct::SetTextBackgroundColor(myColor) };
 						const command output { &setTextColor, &text1 };
 						Write(output.Pointer(), output.Length());
 
-						++green;
+						++myColor.green;
 					}
 
 					for (int64 i { 0 }; i < 256; i++) {
 
-						const command setTextColor { construct::SetTextBackgroundColor(red, green, blue) };
+						const command setTextColor { construct::SetTextBackgroundColor(myColor) };
 						const command output { &setTextColor, &text1 };
 						Write(output.Pointer(), output.Length());
 
-						++blue;
+						++myColor.blue;
 					}
 
 					return SUCCESS;
 				}
 
 				int64 DisplayTextBackgroundColors() {
-					decimal<winapi::wchar> red { L'0', L';' }, green { L'0', L';' }, blue { L'0', L'm' };
+					
+					console::color myColor { { L'0', L';' }, { L'0', L';' }, { L'0', L'm' } };
+					//decimal<winapi::wchar> red { L'0', L';' }, green { L'0', L';' }, blue { L'0', L'm' };
 
 					std::cerr << "TEXT FORMATING\n";
 
 					// It goes blue -> green -> red.
 					for (uint64 i { 0 }; i < 256ull * 256ull * 256ull; i++) {
 
-						const command setTextBackgroundColor { construct::SetTextBackgroundColor(red, green, blue) };
+						const command setTextBackgroundColor { construct::SetTextBackgroundColor(myColor) };
 						const command text1 { L' ' };
 						const command output { &setTextBackgroundColor, &text1 };
 						Write(output.Pointer(), output.Length());
 
-						++blue;
+						++myColor.blue;
 
 						{
 							const char green256[] { L'2', L'5', L'6', L';' };
 							const char blue256[] { L'2', L'5', L'6', L'm' };
 
-							if (blue == blue256) {
-								blue = { L'0', L'm' };
-								++green;
+							if (myColor.blue == blue256) {
+								myColor.blue = { L'0', L'm' };
+								++myColor.green;
 							}
 
-							if (green == green256) {
-								green = { L'0', L';' };
-								++red;
+							if (myColor.green == green256) {
+								myColor.green = { L'0', L';' };
+								++myColor.red;
 							}
 						}
 						
@@ -800,7 +809,7 @@ namespace mst::winapi::console {
 			#pragma GCC diagnostic push
 			#pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 			window = GetConsoleWindow();
-			winapi::handleInstance instance { (winapi::handleInstnace)GetWindowLongW(window, -6) };
+			winapi::handleInstance instance { (winapi::handleInstance)GetWindowLongW(window, -6) };
 			HICON hIcon = LoadIcon(instance, IDI_SHIELD);
 			if (hIcon) {
 				SendMessage(window, WM_SETICON, ICON_SMALL, (LPARAM)hIcon); // Window Icon

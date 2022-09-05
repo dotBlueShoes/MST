@@ -60,14 +60,14 @@ namespace mst::winapi::console::palette {
 	class brush {
 	public:
 		bufforType character;
-		color backgroundColor, characterColor; // This line breaks.
+		color backgroundColor, textColor; // This line breaks.
 		
 		// Empty Constructor. Value is not being initialized. ( e.g. brush (); )
 		constexpr brush() { /* std::cerr << "c\a"; */ }
 		//brush(const brush &other);
 		
-		brush(bufforType nCharacter, color backgroundColor, color characterColor) :
-			character(nCharacter), backgroundColor(backgroundColor), characterColor(characterColor) { /* std::cerr << "3\a"; */ };
+		brush(bufforType character, color backgroundColor, color textColor) :
+			character(character), backgroundColor(backgroundColor), textColor(textColor) { /* std::cerr << "3\a"; */ };
 		
 		~brush() { /* std::cerr << '\a'; */ };
 	} const brushEmpty ( L'\0', colorBlack, colorBlack );

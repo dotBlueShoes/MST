@@ -11,6 +11,9 @@
 
 #include "WinAPI/Debug/Console.hpp"
 
+//#include <stdio.h>
+//#include <wchar.h>
+
 using namespace mst::array_n;
 
 #undef SetConsoleTitle
@@ -66,31 +69,40 @@ namespace mst {
 			}
 		}
 
-		// THIS FUNCTION MIGHT NOT RUN AS SUPPOSED !!!
 		template <size arrSize>
 		inline constexpr uint64 Uint64ToWchars(
-			array<wchar, arrSize>& buffor,
-			uint64 rawValue
+			array<wchar, arrSize>& buffor,			// predefined buffor we will be using.
+			uint64 rawValue							// our value that we need to convert to string
 		) {
-			array<wchar, arrSize> tempBuffor; // Reverse next logic use.
-			wchar* const tempBufforEnd ( tempBuffor.Pointer() + tempBuffor.Length() );
-			wchar* rNext ( tempBufforEnd );
-			uint64 length ( 0 );
-
-			do {
-				*(--rNext) = (wchar)(L'0' + rawValue % 10);
-				rawValue /= 10;
-				length++;
-			} while (rawValue != 0);
-
-			{
-				// Don't know why byt for some reason A - 0 = 5 and not 10... 
-				//  i dont know why but i need to double it. 
-				//  I guess ptrdiff_t works diff then i thought.
-				const ptrdiff_t digitsWritten = tempBufforEnd - rNext; 
-				memcpy(buffor.Pointer(), rNext, (size)(digitsWritten) * 2);
-			}
-			
+			// well theres a chance that this method slows down the program a lot.
+			const uint64 length (swprintf(buffor.Pointer(), buffor.Length(), L"%dfps", rawValue));
+			/*
+			//rawValue
+			// 120
+			// 1, 2, 0
+			// -120
+			// -, 1, 2, 0
+			// / 2 = * 0.5
+			// / 10 = * 0.1
+			// array<wchar, arrSize> tempBuffor; // Reverse next logic use.
+			// wchar* const tempBufforEnd ( tempBuffor.Pointer() + tempBuffor.Length() );
+			// wchar* rNext ( tempBufforEnd );
+			// uint64 length ( 0 );
+			// 
+			// do {
+			// 	*(--rNext) = (wchar)(L'0' + rawValue % 10);
+			// 	rawValue /= 10;
+			// 	length++;
+			// } while (rawValue != 0);
+			// 
+			// {
+			// 	// Don't know why byt for some reason A - 0 = 5 and not 10... 
+			// 	//  i dont know why but i need to double it. 
+			// 	//  I guess ptrdiff_t works diff then i thought.
+			// 	const ptrdiff_t digitsWritten = tempBufforEnd - rNext; 
+			// 	memcpy(buffor.Pointer(), rNext, (size)(digitsWritten) * 2);
+			// }
+			*/
 			return length;
 		}
 
