@@ -135,7 +135,7 @@ namespace mst::winapi::console::draw {
 		array<winapi::wchar, 12> buffor;
 
 		while (frame::isRunning) {
-			RedrawScreen(frame);
+			//RedrawScreen(frame);
 
 			{ // Frame Count
 

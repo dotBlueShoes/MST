@@ -212,7 +212,7 @@ namespace mst::winapi::console {
 
 				retriver command SetTitle(const bufforType* title, const size& titleLength) {
 
-					const size length { 6 + titleLength };
+					const size length { 5 + titleLength };
 					buffor temp { new bufforType[length] };
 
 					temp[0] = L'\x1b';
@@ -224,7 +224,7 @@ namespace mst::winapi::console {
 						temp[4 + i] = title[i];
 						// temp[4 + i] = L'a'; // SEE FOR ADDITIONAL LETTER !!
 
-					temp[length - 1] = L'\x07';
+					temp[4 + titleLength] = L'\x07';
 
 					return { temp, length };
 				}
@@ -817,8 +817,8 @@ namespace mst::winapi::console {
 			}
 			#pragma GCC diagnostic pop
 
-			GetConsoleMode(outputHandle, reinterpret_cast<LPDWORD>(&previousConsoleSetup.outputMode));										// Fetch existing console mode so we correctly add a flag and not turn off others.
-			SetConsoleMode(outputHandle, previousConsoleSetup.outputMode | virtualTerminalProcessing);			// Set the new mode.
+			GetConsoleMode(outputHandle, reinterpret_cast<LPDWORD>(&previousConsoleSetup.outputMode));		// Fetch existing console mode so we correctly add a flag and not turn off others.
+			SetConsoleMode(outputHandle, previousConsoleSetup.outputMode | virtualTerminalProcessing);		// Set the new mode.
 
 			// I don't need to store the whole thing. Thus i have my own types that hold information
 			//  that otherwise global consoleInfo would.

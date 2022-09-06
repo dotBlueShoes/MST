@@ -70,7 +70,7 @@ namespace mst::winapi::console::palette {
 			character(character), backgroundColor(backgroundColor), textColor(textColor) { /* std::cerr << "3\a"; */ };
 		
 		~brush() { /* std::cerr << '\a'; */ };
-	} const brushEmpty ( L'\0', colorBlack, colorBlack );
+	} const brushEmpty ( L' ', colorBlack, colorBlack );
 }
 
 //2 + 3*3
