@@ -13,6 +13,10 @@
 #include "../Thread.hpp"
 #include "Console/Palette.hpp"
 
+
+// for now..
+#include "Console/Frame.hpp"
+
 #undef rename
 #include <iostream>
 #include <charconv>
@@ -742,6 +746,19 @@ namespace mst::winapi::console {
 				MessageBoxExW(nullptr, errorMSG.Pointer(), L"ERROR", MB_OK, 0);
 			}
 		}
+		
+		// block ChangeConsoleBoth(const int16& wx, const int16& wy, const int16& bx, const int16& by) {
+		// 	namespace co = console::output;
+		// 	
+		// 	// If not via variables then using this...
+		// 	// consoleInfo consoleInfo(outputHandle);
+		// 	// GetCurrentConsoleSize(previousConsoleSetup.consoleSize, consoleInfo);
+		// 	// GetCurrentBufferSize(previousConsoleSetup.bufferSize, consoleInfo);
+		// 	
+		// 	frame::window::x
+		// 	
+		// 	//if ()
+		// }
 
 		block ChangeEqualConsoleSize(const int16& x, const int16& y) {
 			namespace co = console::output;
@@ -834,7 +851,40 @@ namespace mst::winapi::console {
 		block Destroy() {
 			SetConsoleMode(outputHandle, previousConsoleSetup.outputMode);										// Restore the mode on the way out to be nice to other command-line applications.
 
-			////OMGGGGG
+			// First we change X
+			if (previousConsoleSetup.bufferSize.X > frame::window::x) { 	// When we're expending console's X.
+				ChangeBufferSize(previousConsoleSetup.bufferSize.X, frame::window::y);
+				ChangeConsoleSize(previousConsoleSetup.consoleSize.Right, int16(frame::window::y - 1));
+			} else { 										// When we're decreasing console's X.
+				ChangeConsoleSize(previousConsoleSetup.consoleSize.Right, int16(frame::window::y - 1));
+				ChangeBufferSize(previousConsoleSetup.bufferSize.X, frame::window::y);
+			}
+				
+			// Second we change Y
+			if (previousConsoleSetup.bufferSize.Y > frame::window::y) { 	// When we're expending console's Y.
+				ChangeBufferSize(previousConsoleSetup.bufferSize.X, previousConsoleSetup.bufferSize.Y);
+				ChangeConsoleSize(previousConsoleSetup.consoleSize.Right, previousConsoleSetup.consoleSize.Bottom);
+			} else { 										// When we're decreasing console's Y.
+				ChangeConsoleSize(previousConsoleSetup.consoleSize.Right, previousConsoleSetup.consoleSize.Bottom);
+				ChangeBufferSize(previousConsoleSetup.bufferSize.X, previousConsoleSetup.bufferSize.Y);
+			}
+			
+			// if (x > previousConsoleSetup.bufferSize.X) { 	// When we're expending console's X.
+			// 	co::ChangeBufferSize(x, previousConsoleSetup.bufferSize.Y);
+			// 	co::ChangeConsoleSize(int16(x - 1), previousConsoleSetup.consoleSize.Bottom);
+			// } else { 										// When we're decreasing console's X.
+			// 	co::ChangeConsoleSize(int16(x - 1), previousConsoleSetup.consoleSize.Bottom);
+			// 	co::ChangeBufferSize(x, previousConsoleSetup.bufferSize.Y);
+			// }
+			// 	
+			// if (y > previousConsoleSetup.bufferSize.Y) { 	// When we're expending console's Y.
+			// 	co::ChangeBufferSize(x, y);
+			// 	co::ChangeConsoleSize(int16(x - 1), int16(y - 1));
+			// } else { 										// When we're decreasing console's Y.
+			// 	co::ChangeConsoleSize(int16(x - 1), int16(y - 1));
+			// 	co::ChangeBufferSize(x, y);
+			// }
+			
 			ChangeConsoleSize(previousConsoleSetup.consoleSize.Right, previousConsoleSetup.consoleSize.Bottom);
 			ChangeBufferSize(previousConsoleSetup.bufferSize.X, previousConsoleSetup.bufferSize.Y);
 			ChangeFont(previousConsoleSetup.font);
@@ -872,8 +922,12 @@ namespace mst::winapi::console {
 				if (key.bKeyDown) output = "Key was pressed\n";
 				else output = "Key was released\n";
 
-				//if (key.wVirtualKeyCode == 0x51)
-				//	game::isRunning == false;
+				if (key.wVirtualKeyCode == 0x51) { // q key
+					//array<wchar, 27> errorMSG(L"THAT KEY WAS PRESSED!");
+					//std::cerr << "THAT KEY WAS PRESSED!";
+					//MessageBoxExW(nullptr, errorMSG.Pointer(), L"ERROR", MB_OK, 0);
+					frame::isRunning = false;
+				}
 
 				std::cerr << output;
 			}
