@@ -387,6 +387,9 @@ namespace mst::winapi::console {
 						command.SetCurrentElement(L';');
 						command.SetCurrentElement(L'2');
 						command.SetCurrentElement(L';');
+						
+						// maybe this 3 for structure could be replaced with single one
+						//  if i applychanges to color code.
 
 						for (size i = 0; i < textColor.red.length; ++i)
 							command.SetCurrentElement(textColor.red.characters[i]);
@@ -443,11 +446,11 @@ namespace mst::winapi::console {
 			}
 
 			uint64 Write(const bufforType* const commandsBuffor, const size& bufforLength) {
-				uint32 writtenLength { 0 };
+				//uint32 writtenLength { 0 };
 
 				//if (!WriteConsoleW(outputHandle, commandsBuffor, (uint32)(bufforLength), reinterpret_cast<LPDWORD>(&writtenLength), nullptr))
 				//	return ::GetLastError();
-				WriteConsoleW(outputHandle, commandsBuffor, (uint32)(bufforLength), reinterpret_cast<LPDWORD>(&writtenLength), nullptr);
+				WriteConsoleW(outputHandle, commandsBuffor, (uint32)(bufforLength), nullptr/*reinterpret_cast<LPDWORD>(&writtenLength)*/, nullptr);
 
 				return 0;
 			}

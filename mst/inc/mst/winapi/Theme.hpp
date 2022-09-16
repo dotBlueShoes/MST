@@ -34,48 +34,56 @@ namespace mst::winapi::window::theme {
 		
 	};
 	
-	const palette<6> sample { 
-		RGB(0xf0, 0xf0, 0xf0),
-		RGB(0xff, 0xff, 0xff), 
-		RGB(0xcc, 0xe8, 0xff), 
-		RGB(0xe5, 0xf3, 0xff), 
-		RGB(0xff, 0xff, 0xff), 
-		RGB(0x00, 0x00, 0x20)
-	};
+	const palette<6> 
+		light { 
+			RGB(0xff, 0xff, 0xff),
+			RGB(0xe5, 0xf3, 0xff),
+			RGB(0xf0, 0xf0, 0xf0),
+			RGB(0xff, 0xff, 0xff), 
+			RGB(0xcc, 0xe8, 0xff), 
+			RGB(0x00, 0x00, 0x20)
+		}, dark {
+			RGB(0xff, 0xff, 0xff),
+			RGB(0x1d, 0x1d, 0x1d),
+			RGB(0x00, 0x00, 0x00), 
+			RGB(0x67, 0x67, 0x67), 
+			RGB(0x4d, 0x4d, 0x4d), 
+			RGB(0x1d, 0x1d, 0x1d)
+		};
 
-	struct theme {
-
-		const color
-			backgroundSecondary,
-			backgroundSelected,
-			backgroundHovered,
-			backgroundPrimary,
-			borderColor,
-			textPrimary;
-
-		theme(
-			const color newBackgroundSecondary,
-			const color newBackgroundSelected,
-			const color newBackgroundHovered,
-			const color newBackgroundPrimary,
-			const color newTextPrimary,
-			const color newBorderColor
-		) :
-			backgroundSecondary(newBackgroundSecondary),
-			backgroundSelected(newBackgroundSelected),
-			backgroundHovered(newBackgroundHovered),
-			backgroundPrimary(newBackgroundPrimary),
-			borderColor(newBorderColor),
-			textPrimary(newTextPrimary)
-		{}
-
-	};
-
-	const theme lightMode	(RGB(0xff, 0xff, 0xff), RGB(0xcc, 0xe8, 0xff), RGB(0xe5, 0xf3, 0xff), RGB(0xff, 0xff, 0xff), RGB(0x00, 0x00, 0x20), RGB(0xf0, 0xf0, 0xf0));
-
-	#ifdef WINDOWS_VERSION_10
-	const theme darkMode	(RGB(0x00, 0x00, 0x00), RGB(0x67, 0x67, 0x67), RGB(0x4d, 0x4d, 0x4d), RGB(0x1d, 0x1d, 0x1d), RGB(0xff, 0xff, 0xff), RGB(0x1d, 0x1d, 0x1d));
-	#endif
+	// 1 struct theme {
+	// 1 
+	// 1 	const color
+	// 1 		backgroundSecondary,
+	// 1 		backgroundSelected,
+	// 1 		backgroundHovered,
+	// 1 		backgroundPrimary,
+	// 1 		borderColor,
+	// 1 		textPrimary;
+	// 1 
+	// 1 	theme(
+	// 1 		const color newBackgroundSecondary,
+	// 1 		const color newBackgroundSelected,
+	// 1 		const color newBackgroundHovered,
+	// 1 		const color newBackgroundPrimary,
+	// 1 		const color newTextPrimary,
+	// 1 		const color newBorderColor
+	// 1 	) :
+	// 1 		backgroundSecondary(newBackgroundSecondary),
+	// 1 		backgroundSelected(newBackgroundSelected),
+	// 1 		backgroundHovered(newBackgroundHovered),
+	// 1 		backgroundPrimary(newBackgroundPrimary),
+	// 1 		borderColor(newBorderColor),
+	// 1 		textPrimary(newTextPrimary)
+	// 1 	{}
+	// 1 
+	// 1 };
+	// 1 
+	// 1 const theme lightMode	(RGB(0xff, 0xff, 0xff), RGB(0xcc, 0xe8, 0xff), RGB(0xe5, 0xf3, 0xff), RGB(0xff, 0xff, 0xff), RGB(0x00, 0x00, 0x20), RGB(0xf0, 0xf0, 0xf0));
+	// 1 
+	// 1 #ifdef WINDOWS_VERSION_10
+	// 1 const theme darkMode	(RGB(0x00, 0x00, 0x00), RGB(0x67, 0x67, 0x67), RGB(0x4d, 0x4d, 0x4d), RGB(0x1d, 0x1d, 0x1d), RGB(0xff, 0xff, 0xff), RGB(0x1d, 0x1d, 0x1d));
+	// 1 #endif
 
 	class solidBrush {
 		brushHandle handle;

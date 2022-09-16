@@ -1,3 +1,5 @@
+#pragma once
+
 #include <windows.h>
 #include <stdio.h>
 #include <fcntl.h>
