@@ -6,6 +6,7 @@
 #include "Modules.hpp"
 
 namespace mst::winapi::application {
+	
 	block Initialize() { 
 	
 		// Initializating DEBUG console window.
@@ -22,5 +23,14 @@ namespace mst::winapi::application {
 			window::darkmode::Initialize();
 		}
 	}
-	block Destroy() { modules::UnloadModule(modules::msftedit); }
+	
+	block Destroy() { 
+		modules::UnloadModule(modules::msftedit); 
+		
+		// ReleaseIO used by DEBUG assigned with dbg::RedirectIO().
+		{	namespace dbg = mst::winapi::debug::console;
+			dbg::ReleaseIO();
+		}
+	}
+	
 }

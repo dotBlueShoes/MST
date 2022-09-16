@@ -48,19 +48,22 @@ namespace mst::winapi::debug::console {
 		
 	}
 	
-	void LogInfo(const LogLevel messageLogLevel, const string message) {
-		if ((LogLevel)DEBUG >= messageLogLevel)
-			std::cout << "Info: " << message << '\n';
+	template <LogLevel messageLogLevel = LogLevel::Normal>
+	constexpr void LogInfo(const string message) {
+		if constexpr ((LogLevel)DEBUG >= messageLogLevel)
+			std::cout << " Info: \t" << message << '\n';
 	}
 	
-	void LogWarning(const LogLevel messageLogLevel, const string message) {
-		if ((LogLevel)DEBUG >= messageLogLevel)
-			std::cout << "Warning: " << message << '\n';
+	template <LogLevel messageLogLevel = LogLevel::Normal>
+	constexpr void LogWarning(const string message) {
+		if constexpr ((LogLevel)DEBUG >= messageLogLevel)
+			std::cout << " Warn: \t" << message << '\n';
 	}
 	
-	void LogError(const LogLevel messageLogLevel, const string message) {
-		if ((LogLevel)DEBUG >= messageLogLevel)
-			std::cout << "Error: " << message << '\n';
+	template <LogLevel messageLogLevel = LogLevel::Verbose>
+	constexpr void LogError(const string message) {
+		if constexpr ((LogLevel)DEBUG >= messageLogLevel)
+			std::cout << " Err: \t" << message << '\n';
 	}
 	
 	void ReleaseIO() {
