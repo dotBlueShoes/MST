@@ -1,7 +1,6 @@
 #pragma once
 #include "BasicTypes.hpp"
 
-
 namespace mst {
 	
 	/// FORWARD DECLARATION
