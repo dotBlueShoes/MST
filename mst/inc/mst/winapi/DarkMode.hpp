@@ -161,14 +161,14 @@ namespace mst::winapi::window::darkmode {
 		proxy::SetWindowCompositionAttribute(window, &data);
 	}
 
-	inline constexpr bool IsEqual(const wchar* first, const wchar* second) {
+	inline constexpr bool IsEqual(const winapi::wchar* first, const winapi::wchar* second) {
 		byte equals = 0;
 		for (int i = 0; first[i] != L'\0'; ++i)
 			equals += first[i] == second[i];
 		return equals;
 	}
 
-	proceeded CheckWhetherImmersiveColorSet(const windowHandle& window, const wchar* pointer, uint64& counter) {
+	proceeded CheckWhetherImmersiveColorSet(const winapi::windowHandle& window, const winapi::wchar* pointer, uint64& counter) {
 		// Ckeck : For some reason we get 10 of those messages but we want only 1.
 		if (IsEqual(pointer, nameImmersiveColorSet) && ++counter == 10) {
 			counter = 0;
