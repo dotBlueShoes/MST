@@ -191,13 +191,15 @@ namespace mst::winapi::window {
 		const brushHandle& backgroundBrush,
 		const int32& windowState,
 		const vector2<uint64>& windowOffset,
-		const vector2<uint64>& windowSize
+		const vector2<uint64>& windowSize,
+		const uint32 windowExtraStyles = 0
 	) {
-		const uint32 windowStyle ( CS_HREDRAW | CS_VREDRAW );
+		const uint32 classStyle ( CS_HREDRAW | CS_VREDRAW );
+		
 		windowClass windowProperties;
 			
 		windowProperties.cbSize 		= ( sizeof(windowClass) );
-		windowProperties.style			= windowStyle;
+		windowProperties.style			= classStyle;
 		windowProperties.lpfnWndProc	= procedure;
 		windowProperties.cbClsExtra		= 0;
 		windowProperties.cbWndExtra		= 0;
@@ -216,7 +218,7 @@ namespace mst::winapi::window {
 				0, 
 				windowClassName, 
 				nullptr, 
-				WS_CHILD, 
+				WS_CHILD | windowExtraStyles, 
 				windowOffset.x, 
 				windowOffset.y, 
 				windowSize.x, 
