@@ -141,6 +141,77 @@ namespace mst::winapi::window {
 
 		return RegisterClassExW(&windowProperties);
 	}
+	
+	const uint16 RegisterCustom(
+		const handleInstance& process,
+		const wchar* windowClassName,
+		const windowProcedure& procedure,
+		const resourceType& iconId,
+		const brushHandle& backgroundBrush
+	) {
+		const iconHandle icon { LoadIcon(process, MAKEINTRESOURCE(iconId)) };
+			//iconSmall	{ LoadIcon(process, MAKEINTRESOURCE(iconSmallId)) };
+
+		//const wchar*		menu			{ MAKEINTRESOURCEW(menuId) };
+		const cursorHandle	cursor			{ LoadCursor(nullptr, IDC_ARROW) };
+		const uint32		windowStyle		{ CS_HREDRAW | CS_VREDRAW };
+		
+		windowClass windowProperties;
+		windowProperties.cbSize 		= ( sizeof(windowClass) );
+		windowProperties.style			= windowStyle;
+		windowProperties.lpfnWndProc	= procedure;
+		windowProperties.cbClsExtra		= 0;
+		windowProperties.cbWndExtra		= 0;
+		windowProperties.hInstance		= process;
+		windowProperties.hIcon			= icon;
+		windowProperties.hCursor		= cursor;
+		windowProperties.hbrBackground	= backgroundBrush;
+		windowProperties.lpszMenuName	= nullptr;
+		windowProperties.lpszClassName	= windowClassName;
+		windowProperties.hIconSm		= nullptr;
+
+		return RegisterClassExW(&windowProperties);
+	}
+	
+	const windowHandle InitializeCustom (
+		const handleInstance& process,
+		const wchar* windowClassName,
+		const wchar* windowTitle,
+		const int32& windowState,
+		const vector2<uint64>& windowPosition,
+		const vector2<uint64>& windowSize
+	) {
+		
+		windowHandle window = CreateWindowExW(
+			WS_EX_APPWINDOW,
+			windowClassName,
+			windowTitle,
+			WS_THICKFRAME | WS_POPUP,
+			windowPosition.x, windowPosition.y,
+			windowSize.x, windowSize.y,
+			nullptr,
+			nullptr,
+			process,
+			nullptr
+		);
+
+		if (!window) return nullptr;
+
+		// Setup information needed for controlling the mode of the window. 
+		GetWindowPlacement(window, &windowMode::windowedPlacement);
+		GetMonitorInfo(												// Retrieves information about a display monitor. If the function succeeds, the return value is nonzero.
+			MonitorFromWindow(window, MONITOR_DEFAULTTOPRIMARY),	// Retrieves a handle to the display monitor that has the largest area of intersection with the bounding rectangle of a specified window.
+			&windowMode::monitorInfo								// monirotInfo reference variable.
+		);
+
+		//windowMode::WindowedBorderless(window);
+		//SetMenu(window, nullptr);
+
+		ShowWindow(window, windowState);
+		UpdateWindow(window);
+
+		return window;
+	}
 
 	const windowHandle Initialize(
 		const handleInstance& process,
