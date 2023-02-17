@@ -11,8 +11,7 @@ namespace mst::winapi::application {
 	
 		// Initializating DEBUG console window.
 		{	namespace dbg = mst::winapi::debug::console;
-			if constexpr (DEBUG != dbg::LogLevel::None)
-				dbg::RedirectIO();
+			DEBUG dbg::RedirectIO();
 		}
 	
 		modules::LoadModule(modules::msftedit, modules::msfteditDLL.Pointer()); 

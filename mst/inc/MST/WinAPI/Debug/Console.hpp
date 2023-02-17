@@ -9,7 +9,7 @@
 #include <iostream>
 #include <fstream>
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL
 namespace mst::winapi::debug::console {
 	
 	/// Because DebugLevel
@@ -25,21 +25,21 @@ namespace mst::winapi::debug::console {
 		freopen_s(&stream, "conout$", "w", stderr);
 	}
 	
-	template <LogLevel messageLogLevel = LogLevel::Normal>
+	template <logging::Level messageLogLevel = logging::Level::Normal>
 	constexpr block LogInfo(const string message) {
-		if constexpr ((LogLevel)DEBUG >= messageLogLevel)
+		if constexpr ((logging::Level)DEBUG_LEVEL >= messageLogLevel)
 			std::cout << " [ Info ]   " << message << '\n';
 	}
 	
-	template <LogLevel messageLogLevel = LogLevel::Normal>
+	template <logging::Level messageLogLevel = logging::Level::Normal>
 	constexpr block LogWarning(const string message) {
-		if constexpr ((LogLevel)DEBUG >= messageLogLevel)
+		if constexpr ((logging::Level)DEBUG_LEVEL >= messageLogLevel)
 			std::cout << " [ Warn ]   " << message << '\n';
 	}
 	
-	template <LogLevel messageLogLevel = LogLevel::Verbose>
+	template <logging::Level messageLogLevel = logging::Level::Verbose>
 	constexpr block LogError(const string message) {
-		if constexpr ((LogLevel)DEBUG >= messageLogLevel)
+		if constexpr ((logging::Level)DEBUG_LEVEL >= messageLogLevel)
 			std::cout << " [ Error ]  " << message << '\n';
 	}
 	

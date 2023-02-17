@@ -4,21 +4,23 @@
 
 #include "WinAPI/Debug/Console.hpp"
 
-#ifdef DEBUG
-namespace mst::debug {
+#ifdef DEBUG_LEVEL
+namespace mst::debug::logger {
 	
-	template <mst::winapi::debug::console::LogLevel messageLogLevel = mst::winapi::debug::console::LogLevel::Normal>
-	constexpr block LogInfo(const string message) {
+	namespace log = mst::winapi::debug::console::logging;
+	
+	template <log::Level messageLogLevel = log::Level::Normal>
+	constexpr block Info(const string message) {
 		mst::winapi::debug::console::LogInfo(message);
 	}
 	
-	template <mst::winapi::debug::console::LogLevel messageLogLevel = mst::winapi::debug::console::LogLevel::Normal>
-	constexpr block LogWarning(const string message) {
+	template <log::Level messageLogLevel = log::Level::Normal>
+	constexpr block Warning(const string message) {
 		mst::winapi::debug::console::LogWarning(message);
 	}
 	
-	template <mst::winapi::debug::console::LogLevel messageLogLevel = mst::winapi::debug::console::LogLevel::Normal>
-	constexpr block LogError(const string message) {
+	template <log::Level messageLogLevel = log::Level::Normal>
+	constexpr block Error(const string message) {
 		mst::winapi::debug::console::LogError(message);
 	}
 	
